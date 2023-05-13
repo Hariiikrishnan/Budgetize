@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./gauge.css";
+import "../styles/gauge.css";
 
 function Gauge() {
   var maxLimit = 4000;

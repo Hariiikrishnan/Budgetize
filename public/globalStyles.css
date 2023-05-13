@@ -2,6 +2,8 @@
 body{
     margin:0;
     background-color:#f4f4f4;
+    font-family: 'Cabin', sans-serif;
+    /* font-family:Verdana, Geneva, Tahoma, sans-serif; */
 }
 
 #d-board-headWrapper{
@@ -18,6 +20,7 @@ body{
     background-color:#f4f4f4;
     padding: 10px 30px;
     border-radius: 16px;
+    top:5%;
 }
 .d-board-head{
     margin-top: 40px;

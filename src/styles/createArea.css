@@ -1,0 +1,31 @@
+.header{
+    background-color: #5cf520;
+    height: 140px;
+    width: 100%;
+    position: fixed;
+    top: 0%;
+    right: 0%;
+    padding:30px;
+}
+.createArea-Head{
+    display: flex;
+    justify-content: space-between;
+    padding: 80px 20px 0;
+
+}
+.headerIcon{
+    background-color: #5cf520!important;
+    box-shadow: none!important;
+    color: white!important;
+    position: fixed!important;
+}
+.headerIcon:first-child{
+    left:10%
+}
+.headerIcon:last-child{
+    right: 10%;
+}
+.headerIcon svg{
+    font-size: 2rem;
+    font-weight: bolder;
+}
