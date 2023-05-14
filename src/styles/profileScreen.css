@@ -26,7 +26,7 @@
 }
 
 .profile-img-name{
-    padding: 40px 0;
+    padding: 30px 0;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -42,10 +42,10 @@
     font-family: 'Righteous', cursive;
 }
 .profile-d-board,.profile-account{
-    padding: 30px 20px;
+    padding: 20px;
 }
 .profile-d-board ul h5,.profile-account h5{
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-family: 'Questrial', sans-serif;
     color:rgb(177 177 177);
 }
@@ -87,3 +87,84 @@
     margin: 20px 0;
     color: red;
 } 
+
+
+/* Edit Profile Component Styling */
+#editProfileWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.editProfile {
+    background-color: white;
+    width: 90%;
+    position: absolute;
+    top: 20%;
+    padding: 30px;
+    /* transform: translate(10px, 10px); */
+    /* transform: translateY(10px); */
+    /* transform: translateX(100%); */
+    border-radius: 16px;
+}
+.editProfile-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.editProfile .profile-img.container{
+    margin:20px 0;
+}
+
+.editProfile input{
+    margin: 10px 0;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-size: 1.3rem;
+    text-align: center;
+    font-family: 'Alata', sans-serif;
+}
+
+.editProfile input:focus-visible{
+    outline: none;
+}
+.editProfile p{
+    color:red;
+    margin-top: 20px;
+    font-size: 1.2rem;
+}
+.profile-img-name button{
+    background: none;
+    box-shadow: none;
+    z-index: 0;
+}
+.editProfile button{
+    background: none;
+    border: none;
+    box-shadow: none
+}
+.editProfile-content button{
+    margin: 20px 0;
+    height: 50px;
+    font-size: 14px;
+    width: 140px;
+    color: white;
+    background-color: red;
+    border: none;
+    border-radius:10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.editProfile-content button:hover{
+    background-color: red;
+}
+/*.editProfile-content button:active{
+    color: black;
+    background-color: rgb(216, 217, 218);
+} */
+.editProfile.active{
+    /* transform: translate(0);
+    transition: 0.5s ease; */
+}

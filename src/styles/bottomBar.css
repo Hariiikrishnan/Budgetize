@@ -72,9 +72,7 @@
     text-align: center;
     color: var(--second-color);
   }
-  .navigation-bar .list-items .item.active .link {
-    color: var(--main-color);
-  }
+  
   .navigation-bar .list-items .item .link .linkIcon {
     color: white;
     text-align: center;
