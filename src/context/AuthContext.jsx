@@ -1,19 +1,17 @@
 import react,{createContext,useContext,useState} from "react";
 
-export const SwipeContext = createContext({
-    state : false,
-    setState : () => { }
+export const AuthData = createContext({
+   
 });
 
 function AuthContext({children}){
 
-    const [swiped,setSwipe ] = useState(false)
+    const [date,setDate] = useState();
+    const [totalPerDay,setTotal] = useState();
 
-    const value = {swiped,setSwipe}
-
-    return <SwipeContext.Provider value={value}>
+    return <AuthData.Provider value={ { value1:[date,setDate] , value2: [totalPerDay,setTotal] }}>
         {children}
-    </SwipeContext.Provider>
+    </AuthData.Provider>
 }
 
 export default AuthContext ;

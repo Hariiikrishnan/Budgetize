@@ -3,6 +3,7 @@ import React from "react";
 import {Link} from "react-router-dom";
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 
+import BottomBar from "../components/BottomBar";
 import Header from "../components/Header.jsx"
 import "../styles/settingsScreen.css"
 function SettingsScreen(){
@@ -13,20 +14,19 @@ function SettingsScreen(){
             <div class="settings-list">
            
             <Link>
-                    <h3>Change Monthly Limit</h3>
+                    <h5>Change Monthly Limit</h5>
                     <ChevronRightRoundedIcon />
                 </Link>
+               
                 <Link>
-                    <h3>Change Username</h3>
-                    <ChevronRightRoundedIcon />
-                </Link>
-                <Link>
-                    <h3>Change Password</h3>
+                    <h5>Change Password</h5>
                     <ChevronRightRoundedIcon />
                 </Link>
 
                
             </div>
+
+            <BottomBar />
         </div>
 
     </>

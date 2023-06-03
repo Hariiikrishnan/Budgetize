@@ -1,0 +1,382 @@
+import React, { useState, useContext, useEffect } from "react";
+
+import axios from "axios";
+
+import Fab from "@mui/material/Fab";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Skeleton from '@mui/material/Skeleton';
+import CircularProgress from "@mui/material/CircularProgress";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+
+import { AuthData } from "../context/AuthContext.jsx";
+import { Link, useNavigate } from "react-router-dom";
+import CreateScreen from "./CreateScreen.jsx";
+import ShortCard from "../components/ShortCard.jsx";
+import Header from "../components/Header.jsx";
+
+import BottomBar from "../components/BottomBar";
+import "../styles/createArea.css";
+
+function CreateArea() {
+  const { value1, value2 } = useContext(AuthData);
+  const [date, setDate] = value1;
+  const navigate = useNavigate();
+
+  const [allLedger, setAllLedger] = useState([]);
+
+  const [isOpenLedger, setOpenLedger] = useState(false);
+  const [selectedPost, setSelectedPost] = useState();
+  const [isLoading,setLoading]=useState(true);
+  const [hasMore,setHasMore]=useState(true);
+  const [pageNo,setPageNo]=useState(1);
+  const [deleteStatus,setDeleteStatus] = useState({
+    loading:false,
+    deleted:false
+  })
+  // var date = new Date();
+
+  // var currentDate = date.getDate();
+  // var currentMonth = date.getUTCMonth();
+  // var currentYear = date.getFullYear();
+  // var array = [];
+  // for (var i = 1; i <= date.getDate(); i++) {
+  //   console.log(i+"-"+(currentMonth+1)+"-"+currentYear)
+  //   array.push(i);
+  // }
+  // console.log(array)
+
+  function handleSearchChange(e) {
+    const { value, name } = e.target;
+    // setSearchDate(value)
+    getSearchedLedger(value);
+    // navigate("/createfield")
+    // setCSActive(true);
+  }
+
+
+  function handleAddChange(e) {
+    const { value, name } = e.target;
+    setDate(value);
+    navigate("/createfield");
+    // setCSActive(true);
+  }
+
+
+  async function getSearchedLedger(searchedDate) {
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      await axios
+        .get(`https://starfish-app-uva3q.ondigitalocean.app/budgetize/${searchedDate}`, config)
+        .then((res) => {
+          console.log(res.data);
+          // setAllLedger(res.data.result)
+        });
+    } catch (err) {
+      console.error("error ", err.res.data);
+    }
+  }
+
+
+
+  
+
+
+  function openLedger(id) {
+    console.log(id);
+    setOpenLedger(true);
+    allLedger.map((singleData) => {
+      if (singleData._id === id) {
+        setSelectedPost(singleData);
+      }
+    });
+    // setSelectedPost(id);
+  }
+
+ async function handleDelete(){
+  setDeleteStatus({loading:true})
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    // const body = JSON.stringify(data);
+    // console.log(data)
+    await axios
+      .delete(
+        `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${selectedPost._id}`,
+        // body,
+        config
+      )
+      .then((res) => {
+        console.log(res.data);
+        setDeleteStatus({loading:false})
+        setDeleteStatus({deleted:true})
+        setAllLedger(res.data.results);
+        setOpenLedger(false);
+        setDeleteStatus({deleted:false})
+      });
+}catch (err) {
+  console.error("error ", err.res.data);
+}
+ }
+
+// Infinite Scrolling
+useEffect(()=>{
+     
+  window.addEventListener("scroll",handleScroll);
+  return ()=> window.removeEventListener("scroll",handleScroll);
+ 
+},[])
+
+const handleScroll = ()=>{
+  
+if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight){
+  setLoading(false);
+  setPageNo((prev)=> prev+1);
+}
+}
+console.log(pageNo)
+console.log(isLoading)
+console.log(hasMore)
+
+useEffect( ()=>{
+  hasMore &&  setLoading(true);
+  async function getAllLedger() {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const res = await axios.get(
+        `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${pageNo}`,
+        // `http://localhost:3001/nbMemories/post/${pageNo}`,
+        
+        config
+      );
+      console.log(res.data.results)
+      // setBackDrop(false);
+      setLoading(false);
+      setAllLedger((prevData)=>{
+        console.log(prevData)
+       return [...prevData,...res.data.results] 
+      });
+      // setAllLedger(res.data.results)
+      if(res.data.results.length===0){
+        console.log("end!!!!!!!")
+        setHasMore(false);
+      }
+    } catch (err) {
+      console.error("error ", err.res.data);
+    }
+  }
+  hasMore &&  getAllLedger();
+},[pageNo])
+
+
+
+
+  return (
+    <>
+      <Header />
+      <div class="createArea-Head">
+        <Fab aria-label="search" className="headerIcon">
+          <SearchIcon
+            onClick={() => {
+              var inputDate = document.getElementById("searchMyDate");
+              inputDate.showPicker();
+            }}
+          />
+        </Fab>
+        <Fab aria-label="add" className="headerIcon">
+          <AddIcon
+            onClick={() => {
+              var inputDate = document.getElementById("myDate");
+              inputDate.showPicker();
+            }}
+          />
+        
+
+          <input
+            type="date"
+            id="myDate"
+            name="date"
+            onChange={handleAddChange}
+            style={{ display: "none" }}
+          />
+          <input
+            type="date"
+            id="searchMyDate"
+            name="searchDate"
+            onChange={handleSearchChange}
+            style={{ display: "none" }}
+          />
+        </Fab>
+      </div>
+
+
+
+
+      <div
+        style={{
+          marginTop: "70px",
+          height: "79vh",
+        }}
+      className="card-body">
+        {allLedger.map((singleData, index) => {
+          
+          return (
+            <ShortCard
+              openLedger={openLedger}
+              date={singleData.ledgerDate}
+              money={singleData.totalPerday}
+              id={singleData._id}
+              expenses={singleData.expenses}
+            />
+          );
+        })}
+      
+         { isLoading &&  <div style={{
+            display:"flex",
+            flexDirection:"column",
+            alignItems:"center"
+          }}>
+          <Skeleton variant="rounded" style={{
+            margin:"8px 0",
+            borderRadius:"12px",
+          }} width={"90%"} height={60} />
+          <Skeleton variant="rounded" style={{
+            margin:"8px 0",
+            borderRadius:"12px",
+          }} width={"90%"} height={60} />
+          <Skeleton variant="rounded" style={{
+            margin:"8px 0",
+            borderRadius:"12px",
+          }} width={"90%"} height={60} />
+          <Skeleton variant="rounded" style={{
+            margin:"8px 0",
+            borderRadius:"12px",
+          }} width={"90%"} height={60} />
+          
+        
+          </div>}
+
+        { hasMore ? null : <p style={{
+          textAlign:"center",
+          fontSize:"1.4rem",
+          color:"red",
+          paddingBottom:"100px"
+        }}>The End !</p>}  
+      </div>
+     
+
+      <BottomBar />
+
+      {isOpenLedger && (
+        <div
+          style={{
+            position: "relative",
+            zIndex: 11011,
+          }}
+        >
+          <div class={`bottom-sheet ${isOpenLedger ? `active` : ``}`}>
+            <div
+              style={{
+                width: "100%",
+                height: "8px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+              onClick={() => {
+                setOpenLedger(false);
+              }}
+            >
+              <hr
+                style={{
+                  background: "grey",
+                  borderRadius: "16px",
+                  width: "20%",
+                }}
+              ></hr>
+            </div>
+
+            <div
+              style={{
+                padding: "20px 0",
+                width: "80%",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <h3>Spent On</h3>
+              <h3>Amount</h3>
+            </div>
+            {selectedPost.expenses.map((expense) => {
+              return (
+                <div
+                  style={{
+                    margin: "5px 0",
+                    width: "70%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <h4>{expense.spentOn}</h4>
+                  <h4>{expense.amount}</h4>
+                </div>
+              );
+            })}
+
+            <div
+              style={{
+                margin: "10px 0",
+                width: "70%",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <h3>Total</h3>
+              <h3>{selectedPost.totalPerday}</h3>
+            </div>
+            <div style={{
+              position:"absolute",
+              left:"5%",
+              bottom:"10%"
+            }}>
+            <Fab style={{
+              backgroundColor:"rgb(255, 81, 81)",
+              color:"white",
+              borderRadius:"20%",
+              height:"50px",
+              width:"50px"
+            }} onClick={handleDelete}>
+            
+
+              { deleteStatus.loading ? <CircularProgress style={{
+                color:"white",
+                height:"30px",
+                width:"30px"
+                }}
+
+                /> : deleteStatus.deleted ? <CheckRoundedIcon /> : <DeleteIcon style={{
+                fontSize:"1.7rem",
+              }}/> }
+            </Fab>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default CreateArea;

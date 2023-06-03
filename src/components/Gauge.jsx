@@ -14,6 +14,7 @@ function Gauge() {
       <div class="d-board-gauge">
         <div class="gauge">
           <div class="progress">
+          
             <div
               class="bar"
               style={{ transform: `rotate(${needlePointer}deg` }}
@@ -24,14 +25,11 @@ function Gauge() {
             ></div>
           </div>
           <div class="gauge-hide">
+          <span class="gauge-dot bottom"></span>
             <h2>₹ {currentAmount}</h2>
           </div>
         </div>
-        <div class="d-board-welcome">
-          <h2>Welcome</h2>
-          <h2>back,</h2>
-          <h2>Owner</h2>
-        </div>
+       
       </div>
       <div class="d-board-footer">
         <h4> Monthly Limit : {maxLimit}</h4>

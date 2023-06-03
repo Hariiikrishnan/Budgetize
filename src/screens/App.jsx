@@ -3,21 +3,26 @@ import { createContext ,useContext } from "react";
 
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Login from "./Login";
 import Dashboard from "./DashboardScreen";
-import CreateArea from "./CreateScreen";
+import CreateArea from "./CreateArea";
+import CreateScreen from "./CreateScreen";
+import ReplyAmount from "./ReplyAmount";
 import ProfileScreen from "./ProfileScreen";
 import SettingsScreen from "./SettingsScreen";
 
 import BottomBar from "../components/BottomBar";
 
-import {SwipeContext} from "../context/AuthContext.jsx";
+import {AuthData} from "../context/AuthContext.jsx";
 
 function App() {
 
-  const [swiped,setSwipe] = useState(true);
+  const [date,setDate] = useState();
+  const [totalPerDay,setTotal] = useState();
 
   
-  const value = {swiped,setSwipe}
+  // const value = {swiped,setSwipe}
 
 
   //  setTimeout(()=>{
@@ -26,7 +31,7 @@ function App() {
       
   return (
     <>
-    <SwipeContext.Provider value={value}>
+    <AuthData.Provider value={ { value1:[date,setDate] , value2: [totalPerDay,setTotal] }}>
       <BrowserRouter>
         <Routes>
           <Route path="/">
@@ -34,14 +39,17 @@ function App() {
             <Route path="/create" element={<CreateArea />} />
             <Route path="/profile" element={<ProfileScreen />} />
             <Route path="/settings" element={<SettingsScreen />} />
+            <Route path="/createfield" element={<CreateScreen />} />
+            {/* <Route path="/totalAmount" element={<ReplyAmount />} /> */}
+            <Route path="/login" element={<Login />} />
             {/* <Route path="/" element={< />} /> */}
            
           </Route>
         </Routes>
-        { swiped && <BottomBar />}
+        {/* { swiped && <BottomBar />} */}
       </BrowserRouter>
        
-      </SwipeContext.Provider>
+      </AuthData.Provider>
     </>
   );
 }

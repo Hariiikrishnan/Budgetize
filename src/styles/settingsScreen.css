@@ -14,8 +14,8 @@
     align-items: center;
     justify-content: space-between;
 }
-.settings-list a h3{
-    color:rgb(86, 84, 84);
-    margin: 20px;
-    font-size: 1.4rem;
+.settings-list a h5{
+    color:rgb(30, 30, 30);
+    margin: 15px 20px;
+    font-size: 1.1rem;
 }

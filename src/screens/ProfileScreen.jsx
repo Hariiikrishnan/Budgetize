@@ -9,6 +9,7 @@ import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import EqualizerRoundedIcon from "@mui/icons-material/EqualizerRounded";
 
+import BottomBar from "../components/BottomBar";
 import EditProfileScreen from "./EditProfileScreen";
 import "../styles/profileScreen.css";
 
@@ -83,6 +84,8 @@ function ProfileScreen() {
         </div>
       </div>
       {isEdit && <EditProfileScreen edit={editState} />}
+
+      <BottomBar />
     </>
   );
 }

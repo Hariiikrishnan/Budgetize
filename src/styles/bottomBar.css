@@ -11,7 +11,9 @@
   
  
 .bottomBar-container{
-  display: flex;
+  z-index: 1100;
+  position: relative;
+    display: flex;
     justify-content: center;
     align-items: center;
  } 
@@ -65,11 +67,13 @@
     height: 60px;
   }
   .navigation-bar .list-items .item .link {
-    display: inline-block;
     height: 4rem;
     width: 4.5rem;
-    line-height: 4.5;
-    text-align: center;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    /* line-height: 4.5;
+    text-align: center; */
     color: var(--second-color);
   }
   
@@ -77,7 +81,7 @@
     color: white;
     text-align: center;
     font-size: 1.8rem;
-    margin-bottom: 35px;
+    /* margin-bottom: 35px; */
     transition: font-size 0.4s linear;
   }
   .navigation-bar .list-items .item.active .link .linkIcon {
@@ -85,3 +89,4 @@
     color:blue
   }
   
+/* Material UI BottomBar Customization */

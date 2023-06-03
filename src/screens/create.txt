@@ -4,73 +4,73 @@ import { AuthData } from "../context/AuthContext.jsx";
 import axios from "axios";
 
 import { Link, useNavigate } from "react-router-dom";
-
+import InputArea from "../components/InputArea.jsx";
 import ReplyAmount from "./ReplyAmount.jsx";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 
-
 function CreateScreen() {
-  
-const component = (
-  <tr>
-    <th>
-      <input
-        placeholder="Spent On..."
-        name="spentOn"
-        onChange={handleChange}
-        autoComplete="off"
-      ></input>
-    </th>
-    <td>
-      <input
-        name="amount"
-        type="number"
-        placeholder="₹"
-        onChange={handleChange}
-        autoComplete="off"
-      ></input>
-    </td>
-  </tr>
-);
+  var total = 0;
 
+  // Variable Component to add input element again and again after onClick..
+  // It works like When we click button one more component is getting added in the components Array(State)
+  const component = (
+    <tr>
+      <th>
+        <input
+          placeholder="Spent On..."
+          name="spentOn"
+          onChange={handleChange}
+          autoComplete="off"
+        ></input>
+      </th>
+      <td>
+        <input
+          name="amount"
+          type="number"
+          placeholder="₹"
+          onChange={handleChange}
+          autoComplete="off"
+        ></input>
+      </td>
+    </tr>
+  );
+
+
+  const navigate = useNavigate();
+  const { value1, value2 } = useContext(AuthData);
+  const [totalPerDay,setTotal] = value2;
+  const [date,setDate] = value1;
+
+  const [components, setComponents] = useState([]);
+  const [inputEmpty, setEmpty] = useState(true);
   const [singleExpense, setExpense] = useState({
     spentOn: "",
     amount: "",
   });
   const [ledger, setLedger] = useState([]);
-  const [components, setComponents] = useState([]);
-  const [inputEmpty, setEmpty] = useState(false);
-  const [isReplyAmount, setReplyAmount] = useState(false);
+  const [totalAmount, setTotalAmount] = useState();
 
-  const { value1, value2 } = useContext(AuthData);
-  const [totalPerDay,setTotal] = value2;
-  const [date,setDate] = value1;
-  
-  var total = 0;
-
-
-
-  // Handle Change function is for getting the input values from event handlers
   function handleChange(e) {
     const { value, name } = e.target;
     setExpense((prevLedger) => {
       return { ...prevLedger, [name]: value };
     });
-    setEmpty(false);
-
-    // console.log(singleExpense)
+    setEmpty(true);
   }
 
+  // useEffect(()=>{
+  //   console.log(singleExpense)
+  // },[singleExpense])
+  
+  // // console.log(singleExpense)
 
-  // Function Handle AddBtn if to add another input component and add the above entered value in the ledger array if the above input fields are filled, otherwise change the error condtion to true.
-  function handleAddBtn() {
+  function handleBtn() {
     if (singleExpense.spentOn === "" || singleExpense.amount === "") {
-      setEmpty(true);
-
+      setEmpty(false);
+      console.log("last one was empty");
     } else {
-      
       setComponents((components) => [...components, component]);
       setLedger((prevLedger) => {
         return [...prevLedger, singleExpense];
@@ -82,69 +82,88 @@ const component = (
     }
   }
 
-  //  Function Handle TickBtn is to make a api call with spreaded previous state ledger and the current singleExpense object if the extra input element was not added.
-  //  Call the calc function with spreaded ledger and current single Expense object as parameters.
-  //  If the user submitted tick btn with extra input element , do the same api calling but only with the spreaded ledger array ,totalPerDay , ledgerDate
-  function handleTickBtn() {
+  function handleTick() {
     if (singleExpense.spentOn !== "" || singleExpense.amount !== "") {
-      // setLedger((prevLedger) => {
-      //   return [...prevLedger, singleExpense];
-      // });   
-
-      var returnedTotal = calc([ ...ledger,singleExpense ])
-      addBudget({expenses : [ ...ledger,singleExpense ],totalPerDay:returnedTotal,ledgerDate:date});
-      // setReady(true)
-       
-    }else{
-      var returnedTotal = calc([...ledger])
-      addBudget({expenses : [ ...ledger ],totalPerDay:returnedTotal,ledgerDate:date})
-        // setTotal(total)
+      console.log("Last one wasnt added");
+      setLedger((prevLedger) => {
+        return [...prevLedger, singleExpense];
+      });
     }
-    // setTotalAmount(true)
-  
+    setTotalAmount(true)
+  }
 
-}
+  useEffect(()=>{
+    console.log(ledger)
+    onPostSubmit()
+  },[totalAmount])
+  useEffect(() => {
+    ledger.map((singleLedger) => {
 
-// Function calc is to calculate the totalPerDay using array map method.
-function calc(data){
-  data.map((singleLedger) => {
-    // console.log(singleLedger);
-    total += Number(singleLedger.amount);
-    // console.log(total);
+     
+      console.log(singleLedger);
+      total += Number(singleLedger.amount);
+      setTotal(total)
+      
+    });    
     
-  })
-  setTotal(total)
-  setReplyAmount(true)
-  return total
-}
+  }, [ledger]);
+  console.log(ledger);
+console.log(totalPerDay)
 
-// Api Calling - Post Request to server side with body date. ( Add Budget )
-  async function addBudget(data){
-    console.log(data)
-    const config = {
-      headers: {
-        "Content-Type": "application/json"
-      },
-    };
-    try {
-      const body = JSON.stringify(data);
-      console.log(data)
-      await axios
-        .post(
-          `https://starfish-app-uva3q.ondigitalocean.app/budgetize`,
-          body,
-          config
-        )
-        .then((res) => {
-          console.log(res.data);
-        });
-  }catch (err) {
+
+
+async function onPostSubmit(e){
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    },
+  };
+  try{
+    console.log({expenses:ledger,totalPerDay:totalPerDay})
+    const body = JSON.stringify({expenses:ledger,totalPerDay:totalPerDay});
+    await axios
+    .post("http://localhost:3001/budgetize",body,config)
+    .then((res) => {
+      console.log(res)
+    });
+  }
+  catch (err) {
     console.error("error ", err.res.data);
   }
 }
 
- 
- 
+
+// async function onSubmit(e) {
+//   const config = {
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: "Bearer " + authState,
+//     },
+//   };
+//   try {
+//     const body = JSON.stringify(post);
+//     await axios
+//       .post(
+//         `https://starfish-app-uva3q.ondigitalocean.app/crushie/moments/${isCurrentUser.u_id}`,
+//         body,
+//         config
+//       )
+//       .then((res) => {
+//         props.onAdd(res.data);
+//       });
+//     setPost({
+//       date: "",
+//       time: "",
+//       place: "",
+//       color: "",
+//       saw: "",
+//       response: "",
+//     });
+//     setLoading(false);
+//   } catch (err) {
+//     console.error("error ", err.res.data);
+//   }
+// }
 
   return (
     <>
@@ -198,7 +217,7 @@ function calc(data){
             return component;
           })}
         </table>
-        {inputEmpty && (
+        {!inputEmpty && (
           <p
             style={{
               textAlign: "center",
@@ -218,7 +237,7 @@ function calc(data){
           }}
         >
           <Fab
-            onClick={handleAddBtn}
+            onClick={handleBtn}
             style={{
               backgroundColor: "#5cf520",
               color: "white",
@@ -230,7 +249,10 @@ function calc(data){
             <AddIcon />
           </Fab>
           <Fab
-            onClick={handleTickBtn}
+            onClick={
+              handleTick
+             
+            }
             style={{
               backgroundColor: "#5cf520",
               color: "white",
@@ -242,10 +264,7 @@ function calc(data){
             <CheckRoundedIcon />
           </Fab>
         </div>
-        { isReplyAmount &&  <ReplyAmount/> }
-
-       
-
+      { totalAmount &&  <ReplyAmount/> }
       </div>
     </>
   );
