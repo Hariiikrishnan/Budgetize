@@ -52,6 +52,8 @@ const component = (
 
 
 
+
+
   // Handle Change function is for getting the input values from event handlers
   function handleChange(e) {
     const { value, name } = e.target;
@@ -131,15 +133,26 @@ function calc(data){
       console.log(data)
       await axios
         .post(
+          // `http://localhost:3001/budgetize`,
           `https://starfish-app-uva3q.ondigitalocean.app/budgetize`,
           body,
           config
         )
         .then((res) => {
+          console.log(res)
           console.log(res.data);
+          // if(res.data.errorMessage==="Duplicate Key"){
+          //   console.log("Date is Already Exist")
+          // }
         });
   }catch (err) {
-    console.error("error ", err.res.data);
+    // console.log("error ", err.res.data);
+      // if(err)
+      // console.log(err.response.status)
+      if(err.response.status===409){
+        console.log("Duplicate Date")
+        
+      }
   }
 }
 
@@ -247,6 +260,7 @@ function calc(data){
        
 
       </div>
+      
     </>
   );
 }

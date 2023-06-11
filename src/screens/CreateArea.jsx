@@ -10,6 +10,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Skeleton from '@mui/material/Skeleton';
 import CircularProgress from "@mui/material/CircularProgress";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import Snackbar from "@mui/material/Snackbar";
+import SnackbarContent from "@mui/material/SnackbarContent";
 
 import { AuthData } from "../context/AuthContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
@@ -32,26 +34,57 @@ function CreateArea() {
   const [isLoading,setLoading]=useState(true);
   const [hasMore,setHasMore]=useState(true);
   const [pageNo,setPageNo]=useState(1);
+  const [invalidDate,setInvalidDate]=useState(false);
+  
   const [deleteStatus,setDeleteStatus] = useState({
     loading:false,
     deleted:false
   })
-  // var date = new Date();
+  
 
-  // var currentDate = date.getDate();
-  // var currentMonth = date.getUTCMonth();
-  // var currentYear = date.getFullYear();
-  // var array = [];
-  // for (var i = 1; i <= date.getDate(); i++) {
-  //   console.log(i+"-"+(currentMonth+1)+"-"+currentYear)
-  //   array.push(i);
-  // }
-  // console.log(array)
+  
+  var todayDate = new Date();
+
+  var currentDate = todayDate.getDate();
+  var currentMonth = (todayDate.getUTCMonth()+1);
+  var currentYear = todayDate.getFullYear();
+ 
+
 
   function handleSearchChange(e) {
     const { value, name } = e.target;
     // setSearchDate(value)
-    getSearchedLedger(value);
+    var enteredDate = parseInt(value.slice(8,10));
+    var enteredMonth = parseInt(value.slice(5,7));
+    var enteredYear = parseInt(value.slice(0,4));
+
+    if (enteredYear > currentYear) {
+      console.log(value.slice(0, 4));
+      console.log("Invalid Year");
+      setInvalidDate(true)
+      setInterval(()=>{
+        setInvalidDate(false);
+      },2000)
+    } else if (enteredMonth >= currentMonth) {
+      if (enteredDate > currentDate) {
+        console.log(value.slice(8, 10));
+        console.log("Invalid Month");
+        setInvalidDate(true);
+        
+        setInterval(()=>{
+          setInvalidDate(false);
+        },2000)
+      } else {
+        console.log("valid Month");
+        getSearchedLedger(value);
+
+      }
+    } else {
+      console.log("no problem");
+      getSearchedLedger(value);
+  
+    }
+    
     // navigate("/createfield")
     // setCSActive(true);
   }
@@ -59,14 +92,44 @@ function CreateArea() {
 
   function handleAddChange(e) {
     const { value, name } = e.target;
-    setDate(value);
-    navigate("/createfield");
+
+    var enteredDate = parseInt(value.slice(8,10));
+    var enteredMonth = parseInt(value.slice(5,7));
+    var enteredYear = parseInt(value.slice(0,4));
+
+    if (enteredYear > currentYear) {
+      console.log(value.slice(0, 4));
+      console.log("Invalid Year");
+      setInvalidDate(true)
+      setInterval(()=>{
+        setInvalidDate(false);
+      },2000)
+    } else if (enteredMonth >= currentMonth) {
+      if (enteredDate > currentDate) {
+        console.log(value.slice(8, 10));
+        console.log("Invalid Month");
+        setInvalidDate(true);
+        
+        setInterval(()=>{
+          setInvalidDate(false);
+        },2000)
+      } else {
+        console.log("valid Month");
+        setDate(value);
+        navigate("/createfield");
+      }
+    } else {
+      console.log("no problem");
+      setDate(value);
+      navigate("/createfield");
+    }
+    
     // setCSActive(true);
   }
 
 
   async function getSearchedLedger(searchedDate) {
-
+    console.log(searchedDate)
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -74,30 +137,31 @@ function CreateArea() {
     };
     try {
       await axios
-        .get(`https://starfish-app-uva3q.ondigitalocean.app/budgetize/${searchedDate}`, config)
+        .get(
+          // `http://localhost:3001/budgetize/search/${searchedDate}`,
+          `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${searchedDate}`,
+         config )
         .then((res) => {
           console.log(res.data);
           // setAllLedger(res.data.result)
+          setSelectedPost(...res.data.results)
+          setOpenLedger(true)
         });
     } catch (err) {
       console.error("error ", err.res.data);
     }
   }
-
-
-
-  
-
-
+console.log(selectedPost)
+// Function to open the Ledger Bottom Sheet and set the selected ledger in state
   function openLedger(id) {
     console.log(id);
     setOpenLedger(true);
     allLedger.map((singleData) => {
       if (singleData._id === id) {
         setSelectedPost(singleData);
+        
       }
     });
-    // setSelectedPost(id);
   }
 
  async function handleDelete(){
@@ -108,22 +172,26 @@ function CreateArea() {
     },
   };
   try {
-    // const body = JSON.stringify(data);
-    // console.log(data)
     await axios
       .delete(
+        // `http://localhost:3001/budgetize/${selectedPost._id}`,
         `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${selectedPost._id}`,
         // body,
         config
       )
       .then((res) => {
-        console.log(res.data);
+       
         setDeleteStatus({loading:false})
         setDeleteStatus({deleted:true})
         setAllLedger(res.data.results);
+
+      });
+      setTimeout(()=>{
+
         setOpenLedger(false);
         setDeleteStatus({deleted:false})
-      });
+      },2000)
+     
 }catch (err) {
   console.error("error ", err.res.data);
 }
@@ -144,9 +212,8 @@ if(window.innerHeight + document.documentElement.scrollTop + 1 >= document.docum
   setPageNo((prev)=> prev+1);
 }
 }
-console.log(pageNo)
-console.log(isLoading)
-console.log(hasMore)
+
+// UseEffect for Infinite Scrolling
 
 useEffect( ()=>{
   hasMore &&  setLoading(true);
@@ -159,18 +226,18 @@ useEffect( ()=>{
     try {
       const res = await axios.get(
         `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${pageNo}`,
-        // `http://localhost:3001/nbMemories/post/${pageNo}`,
+        // `http://localhost:3001/budgetize/${pageNo}`,
         
         config
       );
       console.log(res.data.results)
-      // setBackDrop(false);
+
       setLoading(false);
       setAllLedger((prevData)=>{
         console.log(prevData)
        return [...prevData,...res.data.results] 
       });
-      // setAllLedger(res.data.results)
+
       if(res.data.results.length===0){
         console.log("end!!!!!!!")
         setHasMore(false);
@@ -278,6 +345,24 @@ useEffect( ()=>{
         }}>The End !</p>}  
       </div>
      
+      
+      <Snackbar open={invalidDate}>
+        <SnackbarContent
+          style={{
+            backgroundColor: "rgb(255, 81, 81)",
+            color: "white",
+            lineHeight:"1",
+            fontSize:"1.2rem",
+            display: "center",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "12px",
+            margin: "0% 26%",
+            marginBottom: "27%",
+          }}
+          message={<span id="client-snackbar">Invalid Date</span>}
+        />
+      </Snackbar>
 
       <BottomBar />
 
@@ -320,7 +405,9 @@ useEffect( ()=>{
               <h3>Spent On</h3>
               <h3>Amount</h3>
             </div>
-            {selectedPost.expenses.map((expense) => {
+          
+            { selectedPost.expenses.flat(1).map((expense) => {
+              
               return (
                 <div
                   style={{

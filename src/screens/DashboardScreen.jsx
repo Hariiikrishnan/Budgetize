@@ -7,11 +7,12 @@ import ShortCard from "../components/ShortCard.jsx";
 import {Link} from "react-router-dom";
 import BottomBar from "../components/BottomBar";
 
+import { AuthData } from "../context/AuthContext.jsx";
 import { SwipeContext } from "../context/AuthContext.jsx";
 
 function DashboardScreen() {
 
-  // var progress = "36deg";
+
 
   var maxLimit = 3000;
   var currentAmount = 2970;

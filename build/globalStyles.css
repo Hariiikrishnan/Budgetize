@@ -3,7 +3,7 @@ body{
     margin:0;
     background-color:#ecebeb;
     /* background-color:#ebebeb; */
-    font-family: 'Cabin', sans-serif;
+    font-family: 'Cabin', sans-serif !important;
     position: relative;
     /* font-family:Verdana, Geneva, Tahoma, sans-serif; */
 }
@@ -146,9 +146,14 @@ body{
   font-weight: 600;
 }
 .login input:focus{
-  outline:solid #ffffff 2px;
+  outline:solid #000000 2px;
   background-color: rgba(215, 215, 215, 0.5);
+  color:#ffffff;
 }
+
+.login input:focus::placeholder{
+  color:#ffffff;
+} 
 
 .login button:active{
   background-color: rgba(19, 255, 141, 0.5)!important;
