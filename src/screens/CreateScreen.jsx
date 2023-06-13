@@ -44,9 +44,10 @@ const component = (
   const [inputEmpty, setEmpty] = useState(false);
   const [isReplyAmount, setReplyAmount] = useState(false);
 
-  const { value1, value2 } = useContext(AuthData);
+  const { value1, value2,value3 } = useContext(AuthData);
   const [totalPerDay,setTotal] = value2;
   const [date,setDate] = value1;
+  const [authToken,setAuthToken] = value3;
   
   var total = 0;
 
@@ -125,7 +126,8 @@ function calc(data){
     console.log(data)
     const config = {
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + authToken.token,
       },
     };
     try {

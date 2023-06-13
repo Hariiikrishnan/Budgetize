@@ -1,6 +1,9 @@
+import React,{useState,useContext} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SocialIcon } from 'react-social-icons';
 import Fab from "@mui/material/Fab";
+import { AuthData } from "../context/AuthContext.jsx";
+import axios from "axios";
 
 function Login() {
 
@@ -13,8 +16,76 @@ function Login() {
     textTransform:"capitalize",
     boxShadow:"none"
   }
+  const [loginCreds,setLoginCreds] = useState({
+    username:"",
+    password:""
+  });
+  const [loginState,setLoginState] = useState({
+    loading:false,
+    loaded:true,
+    unAuthorized:false
+  })
+  const { value1, value2 ,value3} = useContext(AuthData);
+  const [authToken,setAuthToken] = value3;
 
   const navigate = useNavigate();
+  function handleChange(e){
+    const {name,value} = e.target;
+    setLoginCreds((prevNotes) => {
+      return { ...prevNotes, [name]: value };
+    });
+  }
+
+  console.log(loginCreds)
+
+
+  async function handleLogin(e){
+    e.preventDefault();
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      // console.log(loginAccount);
+      const body = JSON.stringify(loginCreds);
+      // console.log(body);
+      await axios
+        .post(
+          "https://starfish-app-uva3q.ondigitalocean.app/budgetize/users/login",
+          // `http://localhost:3001/budgetize/users/login`,
+           body, config)
+        .then((res) => {
+          // setLoggedIn(true);
+          // setCurrentUser(res.data.user);
+          // setAuthState(res.data.token);
+          setAuthToken(res.data)
+          // console.log(res.data.token)
+          
+        }).catch(function (error) {
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            console.log(error.response.status);
+            if(error.response.status===401){
+              setLoginState({unAuthorized:true})
+            }
+            console.log(error.response.headers);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+      
+        });
+    } catch (err) {
+      console.error("error ", err.res.data);
+     
+    }
+  
+  }
   return (
     <>
       <div
@@ -41,8 +112,8 @@ function Login() {
                 margin:"20px"
             }}>Login</h3>
 
-            <input name="username" placeholder="Username" />
-            <input name="password" type="password" placeholder="Password" />
+            <input name="username" placeholder="Username" onChange={handleChange}/>
+            <input name="password" type="password" placeholder="Password" onChange={handleChange} />
 
             <div style={{
                 display:"flex",
@@ -56,7 +127,7 @@ function Login() {
                 width:"100px",
                 borderRadius:"10px",
                 textAlign:"center"
-            }}>
+            }} onClick={handleLogin}>
             Login
         </Fab>
 
@@ -81,8 +152,12 @@ function Login() {
           alignItems:"center",
           justifyContent:"space-evenly",
           height:"250px",
-          marginTop:"20px"
+          marginTop:"10px"
         }}>
+        {loginState.unAuthorized && <p style={{
+          color:"red",
+          marginBottom:"20px"
+        }}>Invalid Credentials</p>}
         <p>OR</p>
           <Fab style={oAuthBtnStyles}>
            Login Using Snapchat      <SocialIcon network="snapchat" style={{ height: 25, width: 25 , color:"white" ,margin:"8px"}} key="25" />

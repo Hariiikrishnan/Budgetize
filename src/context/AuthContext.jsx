@@ -8,8 +8,9 @@ function AuthContext({children}){
 
     const [date,setDate] = useState();
     const [totalPerDay,setTotal] = useState();
+    const [authToken,setAuthToken] = useState();
 
-    return <AuthData.Provider value={ { value1:[date,setDate] , value2: [totalPerDay,setTotal] }}>
+    return <AuthData.Provider value={ { value1:[date,setDate] , value2: [totalPerDay,setTotal] , value3: [authToken,setAuthToken]}}>
         {children}
     </AuthData.Provider>
 }

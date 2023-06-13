@@ -13,18 +13,23 @@ import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import Snackbar from "@mui/material/Snackbar";
 import SnackbarContent from "@mui/material/SnackbarContent";
 
+
 import { AuthData } from "../context/AuthContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import CreateScreen from "./CreateScreen.jsx";
 import ShortCard from "../components/ShortCard.jsx";
 import Header from "../components/Header.jsx";
+import SlideLeft from "../components/SlideLeft.jsx";
 
 import BottomBar from "../components/BottomBar";
 import "../styles/createArea.css";
 
 function CreateArea() {
-  const { value1, value2 } = useContext(AuthData);
+
+  const { value1, value2 ,value3} = useContext(AuthData);
   const [date, setDate] = value1;
+  const [authToken, setAuthToken] = value3;
+
   const navigate = useNavigate();
 
   const [allLedger, setAllLedger] = useState([]);
@@ -41,7 +46,7 @@ function CreateArea() {
     deleted:false
   })
   
-
+  
   
   var todayDate = new Date();
 
@@ -133,6 +138,7 @@ function CreateArea() {
     const config = {
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + authToken.token,
       },
     };
     try {
@@ -169,6 +175,7 @@ console.log(selectedPost)
   const config = {
     headers: {
       "Content-Type": "application/json",
+      Authorization: "Bearer " + authToken.token,
     },
   };
   try {
@@ -221,12 +228,13 @@ useEffect( ()=>{
     const config = {
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + authToken.token,
       },
     };
     try {
       const res = await axios.get(
         `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${pageNo}`,
-        // `http://localhost:3001/budgetize/${pageNo}`,
+        // `http://localhost:3001/budgetize/allLedger/${pageNo}`,
         
         config
       );
@@ -249,7 +257,11 @@ useEffect( ()=>{
   hasMore &&  getAllLedger();
 },[pageNo])
 
-
+// useEffect(()=>{
+//   if(authToken===undefined){
+//     navigate("/login")
+//   }
+// },[])
 
 
   return (
@@ -298,7 +310,7 @@ useEffect( ()=>{
           marginTop: "70px",
           height: "79vh",
         }}
-      className="card-body">
+      class={`card-body ${isOpenLedger ? `active` : ``}`}>
         {allLedger.map((singleData, index) => {
           
           return (
@@ -366,7 +378,7 @@ useEffect( ()=>{
 
       <BottomBar />
 
-      {isOpenLedger && (
+      {/* {isOpenLedger && ( */}
         <div
           style={{
             position: "relative",
@@ -406,7 +418,7 @@ useEffect( ()=>{
               <h3>Amount</h3>
             </div>
           
-            { selectedPost.expenses.flat(1).map((expense) => {
+            { isOpenLedger?selectedPost.expenses.flat(1).map((expense) => {
               
               return (
                 <div
@@ -421,7 +433,7 @@ useEffect( ()=>{
                   <h4>{expense.amount}</h4>
                 </div>
               );
-            })}
+            }) : null}
 
             <div
               style={{
@@ -432,7 +444,7 @@ useEffect( ()=>{
               }}
             >
               <h3>Total</h3>
-              <h3>{selectedPost.totalPerday}</h3>
+              <h3>{isOpenLedger?selectedPost.totalPerday:null}</h3>
             </div>
             <div style={{
               position:"absolute",
@@ -458,10 +470,36 @@ useEffect( ()=>{
                 fontSize:"1.7rem",
               }}/> }
             </Fab>
+            
+            <Snackbar open={deleteStatus.deleted} TransitionComponent={SlideLeft} style={{
+              bottom:"10%",
+              left:"10%"
+            }}>
+        <SnackbarContent
+          style={{
+            backgroundColor: "rgb(231 219 219)",
+            color: "rgb(255, 81, 81)",
+            border:"solid rgb(255, 81, 81) 2px",
+            lineHeight:"1",
+            fontFamily: "Cabin, sans-serif",
+            fontSize:"1.2rem",
+            fontWeight:"bolder",
+            display: "center",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "12px",
+            margin: "0% 10% 0% 15%",
+            boxShadow:"none"
+          }}
+          message={<span id="client-snackbar">Deleted Successfully!</span>}
+        />
+      </Snackbar>
+      
             </div>
           </div>
         </div>
-      )}
+      {/* )} */}
+      
     </>
   );
 }

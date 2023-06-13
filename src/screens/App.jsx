@@ -11,17 +11,18 @@ import CreateScreen from "./CreateScreen";
 import ReplyAmount from "./ReplyAmount";
 import ProfileScreen from "./ProfileScreen";
 import SettingsScreen from "./SettingsScreen";
+import ProtectedRoute from "./ProtectedRoute";
 
 import BottomBar from "../components/BottomBar";
 
-import {AuthData} from "../context/AuthContext.jsx";
+import AuthContext,{AuthData} from "../context/AuthContext.jsx";
 
 function App() {
 
-  const [date,setDate] = useState();
-  const [totalPerDay,setTotal] = useState();
 
-  
+  const { value1, value2 ,value3} = useContext(AuthData);
+  const [authToken,setAuthToken]= value3;
+  // const [date, setDate] = value1;
   // const value = {swiped,setSwipe}
 
 
@@ -31,25 +32,37 @@ function App() {
       
   return (
     <>
-    <AuthData.Provider value={ { value1:[date,setDate] , value2: [totalPerDay,setTotal] }}>
+   
       <BrowserRouter>
         <Routes>
-          <Route path="/">
-            <Route index element={<Dashboard />} />
-            <Route path="/create" element={<CreateArea />} />
-            <Route path="/profile" element={<ProfileScreen />} />
-            <Route path="/settings" element={<SettingsScreen />} />
-            <Route path="/createfield" element={<CreateScreen />} />
+          {/* <Route path="/"> */}
+          
+          
+          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            
+
+          
+            <Route path="/create" element={<ProtectedRoute><CreateArea /></ProtectedRoute>} />
+            
+            <Route path="/profile" element={<ProtectedRoute><ProfileScreen /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><SettingsScreen /></ProtectedRoute>} />
+            <Route path="/createfield" element={<ProtectedRoute><CreateScreen /></ProtectedRoute>} />
             {/* <Route path="/totalAmount" element={<ReplyAmount />} /> */}
+
+           
             <Route path="/login" element={<Login />} />
+
+
+
+
             {/* <Route path="/" element={< />} /> */}
            
-          </Route>
+          {/* </Route> */}
         </Routes>
         {/* { swiped && <BottomBar />} */}
       </BrowserRouter>
        
-      </AuthData.Provider>
+
     </>
   );
 }

@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState ,useContext,useEffect } from "react";
 
 import Fab from "@mui/material/Fab";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import SpeedRoundedIcon from "@mui/icons-material/SpeedRounded";
 import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
 import EqualizerRoundedIcon from "@mui/icons-material/EqualizerRounded";
+import { AuthData } from "../context/AuthContext.jsx";
 
 import BottomBar from "../components/BottomBar";
 import EditProfileScreen from "./EditProfileScreen";
@@ -16,6 +17,17 @@ import "../styles/profileScreen.css";
 function ProfileScreen() {
   const [isEdit, setEdit] = useState(false);
   const editState = { isEdit, setEdit };
+  const navigate = useNavigate();
+
+  const { value1, value2 ,value3} = useContext(AuthData);
+
+  const [authToken, setAuthToken] = value3;
+
+  // useEffect(()=>{
+  //   if(authToken===undefined){
+  //     navigate("/login")
+  //   }
+  // },[])
   return (
     <>
       <div class="profile">
@@ -78,9 +90,12 @@ function ProfileScreen() {
         </div>
         <div class="profile-account">
           <h5>Account!</h5>
-          <Link>
-            <h3>Logout</h3>
-          </Link>
+          
+            <h3 onClick={()=>{
+              setAuthToken()
+              navigate("/login")
+            }}>Logout</h3>
+          
         </div>
       </div>
       {isEdit && <EditProfileScreen edit={editState} />}
