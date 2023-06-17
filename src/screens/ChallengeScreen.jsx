@@ -3,6 +3,7 @@ import { useParams , useNavigate} from "react-router-dom";
 import { AuthData } from "../context/AuthContext.jsx";
 import Fab from "@mui/material/Fab";
 
+// import "../styles/globalStyles.css"
 
 function ChallengeScreen(props) {
   // console.log(props)

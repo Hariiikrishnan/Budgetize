@@ -22,7 +22,7 @@ import Header from "../components/Header.jsx";
 import SlideLeft from "../components/SlideLeft.jsx";
 
 import BottomBar from "../components/BottomBar";
-import "../styles/createArea.css";
+import styles from "../styles/createArea.css";
 
 function CreateArea() {
 
@@ -268,7 +268,7 @@ useEffect( ()=>{
     <>
       <Header />
       <div class="createArea-Head">
-        <Fab aria-label="search" className="headerIcon">
+        <Fab aria-label="search" className={styles.headerIcon}>
           <SearchIcon
             onClick={() => {
               var inputDate = document.getElementById("searchMyDate");
@@ -276,7 +276,7 @@ useEffect( ()=>{
             }}
           />
         </Fab>
-        <Fab aria-label="add" className="headerIcon">
+        <Fab aria-label="add" className={styles.headerIcon}>
           <AddIcon
             onClick={() => {
               var inputDate = document.getElementById("myDate");

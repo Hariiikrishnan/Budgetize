@@ -12,6 +12,8 @@ import BottomBar from "../components/BottomBar";
 import { AuthData } from "../context/AuthContext.jsx";
 import { SwipeContext } from "../context/AuthContext.jsx";
 
+// import styles from "../styles/globalStyles.css";
+
 function DashboardScreen() {
 
   const { value1, value2 ,value3,value4} = useContext(AuthData);
@@ -85,14 +87,14 @@ function DashboardScreen() {
 
     <div id="d-board-headWrapper">
       <h1>Budgetize</h1>
-      {/* <span class="gauge-dot top"></span> */}
+      {/* <span className="gauge-dot top"></span> */}
 
-      <div class="d-board-head">
+      <div className="d-board-head">
         {/* <Gauge /> */}
         <div style={{display:"flex", justifyContent:"space-around" , alignItems:"center", margin:"30px"}}>
           
         
-        <div class="d-board welcome">
+        <div className="d-board welcome">
           <h4>Welcome Back,</h4>
           <h2 style={{
             margin:"2px 0",
@@ -100,7 +102,7 @@ function DashboardScreen() {
           <h2>₹ {authToken.user.currentAmount}</h2>
         </div>
         <div >
-          <div data-progress={spendPercent} class="d-board expenseBar" style={{ background :`conic-gradient(#5cf520 ${progress}, transparent 0deg)` }} >
+          <div data-progress={spendPercent} className="d-board expenseBar" style={{ background :`conic-gradient(#5cf520 ${progress}, transparent 0deg)` }} >
           </div>
         </div>
         </div>
@@ -176,7 +178,7 @@ function DashboardScreen() {
         { authToken.user.challenge!=="none" ?
         <div>
             <div className="d-board-chlng"> 
-            <div class="profile-img container" style={{
+            <div className="profile-img container" style={{
             margin:"10px"
           }}> 
             <img src={
@@ -217,7 +219,7 @@ function DashboardScreen() {
             {/* User 2 Profile */}
             <div className="d-board-chlng">
             
-          <div class="profile-img container" style={{
+          <div className="profile-img container" style={{
             margin:"10px"
           }}>
             <img src={
@@ -342,7 +344,7 @@ function DashboardScreen() {
         return <ShortCard date={singleData.ledgerDate} money={singleData.totalPerday} />;
       })}
 
-      <div class="bottomButton">
+      <div className="bottomButton">
       <Link to="/create">
         <Button variant="outlined" size="small">
           See All Activities
