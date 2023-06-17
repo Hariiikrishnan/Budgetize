@@ -76,7 +76,7 @@ function ShortCard(props) {
             }>
             {/* <div > */}
               <h4>{props.date}</h4>
-              <h4>{props.money}</h4>
+              <h4>₹ {props.money}</h4>
             {/* </div> */}
            </Fab>
           

@@ -135,7 +135,7 @@ function calc(data){
       console.log(data)
       await axios
         .post(
-          // `http://localhost:3001/budgetize`,
+          // `http://localhost:3001/budgetize/add/${authToken.user.u_id}`,
           `https://starfish-app-uva3q.ondigitalocean.app/budgetize`,
           body,
           config
@@ -166,11 +166,12 @@ function calc(data){
       <div
         style={{
           width: "100vw",
-          height: "100vh",
+          height: "100%",
           position: "relative",
           top: "0%",
           backgroundColor: "white",
           zIndex: 10000,
+          overflowY:"scroll"
         }}
       >
         <div

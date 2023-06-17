@@ -7,21 +7,21 @@ function ProtectedRoute(props){
     const navigate = useNavigate();
     const {value1,value2,value3} = useContext(AuthData);
     const [authToken,setAuthToken] = value3;
-    const [isLoggedIn,setLoggedIn] = useState(false);
+    // const [isLoggedIn,setLoggedIn] = useState(false);
     const checkUserToken = () =>{
         if(!authToken || authToken==="undefined"){
-            setLoggedIn(false);
+            // setLoggedIn(false);
             console.log("Getting false")
             return navigate("/login")
         }
-        setLoggedIn(true);
+        // setLoggedIn(true);
     }
 
     useEffect(()=>{
         checkUserToken()
-    },[isLoggedIn]);
+    },[]);
     return <>
-        {isLoggedIn ? props.children : null }
+        {authToken?authToken.token ? props.children : null  : null }
     </>
 }
 

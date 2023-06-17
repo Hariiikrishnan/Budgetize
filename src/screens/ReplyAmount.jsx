@@ -14,14 +14,15 @@ function ReplyAmount(){
     return <>
     <div style={{
         width: "100vw",
-          height: "100vh",
+          height: "100%",
           position: "absolute",
           top: "0%",
           backgroundColor: "#5cf520",
           zIndex: 10000,
           display:"flex",
           justifyContent:"center",
-          alignItems:"center"
+          alignItems:"center",
+          overflow:"hidden"
     }}>
       <div style={{
         background:"white",

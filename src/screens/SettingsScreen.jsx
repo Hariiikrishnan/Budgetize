@@ -18,6 +18,8 @@ function SettingsScreen(){
     //       navigate("/login")
     //     }
     //   },[])
+
+
     return <>
         <Header />
         <div class="settings">
@@ -34,6 +36,11 @@ function SettingsScreen(){
                     <ChevronRightRoundedIcon />
                 </Link>
 
+                <Link to={`/challenge/${authToken.user.username}`}
+                >
+                    <h5>Add Friendly Challenge</h5>
+                    <ChevronRightRoundedIcon />
+                </Link>
                
             </div>
 

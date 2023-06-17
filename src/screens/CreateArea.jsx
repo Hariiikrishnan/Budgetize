@@ -144,7 +144,7 @@ function CreateArea() {
     try {
       await axios
         .get(
-          // `http://localhost:3001/budgetize/search/${searchedDate}`,
+          // `http://localhost:3001/budgetize/search/${searchedDate}/${authToken.user.u_id}`,
           `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${searchedDate}`,
          config )
         .then((res) => {
@@ -181,7 +181,7 @@ console.log(selectedPost)
   try {
     await axios
       .delete(
-        // `http://localhost:3001/budgetize/${selectedPost._id}`,
+        // `http://localhost:3001/budgetize/${selectedPost._id}/${authToken.user.u_id}`,
         `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${selectedPost._id}`,
         // body,
         config
@@ -234,7 +234,7 @@ useEffect( ()=>{
     try {
       const res = await axios.get(
         `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${pageNo}`,
-        // `http://localhost:3001/budgetize/allLedger/${pageNo}`,
+        // `http://localhost:3001/budgetize/allLedger/${pageNo}/${authToken.user.u_id}`,
         
         config
       );
@@ -437,7 +437,7 @@ useEffect( ()=>{
 
             <div
               style={{
-                margin: "10px 0",
+                margin: "10px 0 40px 0",
                 width: "70%",
                 display: "flex",
                 justifyContent: "space-between",

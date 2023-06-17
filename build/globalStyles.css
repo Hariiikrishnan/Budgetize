@@ -160,3 +160,33 @@ body{
   border: solid white 2px;
 
 }
+
+
+/* Challenge Screen Styles */
+/* 
+.guidelines{
+  text-align: center;
+}
+.guidelines > ul{
+  display: inline-block;
+} */
+.guidelines ul li::marker{
+  color:#858585
+}
+.guidelines ul li{
+  margin:8px 0px;
+}
+
+/* Challenge Card in Dashboard Styles */
+
+.dashboard .profile-img.container{
+    width: 55px;
+    height:55px
+}
+.d-board-chlng{
+  width:25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

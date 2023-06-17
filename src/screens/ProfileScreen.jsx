@@ -36,11 +36,14 @@ function ProfileScreen() {
         </div>
         <div class="profile-img-name">
           <div class="profile-img container">
-            <img src="images/minato_profile.jpg" />
+            <img src={
+              // `http://localhost:3001/budgetize/account/profile/${authToken.user.u_id}`} 
+              `https://starfish-app-uva3q.ondigitalocean.app/budgetize/account/profile/${authToken.user.u_id}`} 
+              alt="Profile PFP"/>
           </div>
           <div>
-            <h2>Minato Namikaze</h2>
-            <p>@yellow_flash</p>
+            <h2>{authToken.user.username.charAt().toUpperCase() + authToken.user.username.slice(1)}</h2>
+            {/* <p>@yellow_flash</p> */}
           </div>
           <Link
             onClick={() => {

@@ -1,5 +1,5 @@
 import React,{useState,useContext} from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useParams } from "react-router-dom";
 import { SocialIcon } from 'react-social-icons';
 import Fab from "@mui/material/Fab";
 import { AuthData } from "../context/AuthContext.jsx";
@@ -25,10 +25,15 @@ function Login() {
     loaded:true,
     unAuthorized:false
   })
-  const { value1, value2 ,value3} = useContext(AuthData);
+  const { value1, value2 ,value3 , value4} = useContext(AuthData);
   const [authToken,setAuthToken] = value3;
-
+  const [challenger,setChallenger] = value4;
   const navigate = useNavigate();
+  const {u_id1,u_id2} = useParams();
+  
+  
+
+
   function handleChange(e){
     const {name,value} = e.target;
     setLoginCreds((prevNotes) => {
@@ -52,14 +57,32 @@ function Login() {
       // console.log(body);
       await axios
         .post(
-          "https://starfish-app-uva3q.ondigitalocean.app/budgetize/users/login",
-          // `http://localhost:3001/budgetize/users/login`,
+          // "https://starfish-app-uva3q.ondigitalocean.app/budgetize/users/login",
+          `http://localhost:3001/budgetize/users/login`,
            body, config)
         .then((res) => {
           // setLoggedIn(true);
           // setCurrentUser(res.data.user);
           // setAuthState(res.data.token);
-          setAuthToken(res.data)
+          console.log(res.data)
+          // if(res.data.user.challenge==="none"||res.data.user.challenge==="requested"){
+          //   setAuthToken(res.data);
+          // }else{
+          //   setChallenger(res.data.challenger)
+          // }
+          if(res.data.user.challenge!=="none"){
+              setChallenger(...res.data.challenger)
+          }
+          setAuthToken(res.data);
+
+
+          if(u_id1){
+            // console.log("yeah..",u_id2)
+            navigate(`${res.data.user.username}`);
+            
+          }else{
+            navigate("/")
+          }
           // console.log(res.data.token)
           
         }).catch(function (error) {
@@ -109,7 +132,8 @@ function Login() {
             <h3 style={{
                 textAlign:"center",
                 fontSize:"1.5rem",
-                margin:"20px"
+                margin:"20px",
+                
             }}>Login</h3>
 
             <input name="username" placeholder="Username" onChange={handleChange}/>
@@ -126,7 +150,10 @@ function Login() {
                 height:"30px",
                 width:"100px",
                 borderRadius:"10px",
-                textAlign:"center"
+                fontSize:"17px",
+                fontWeight:"600",
+                textAlign:"center",
+                textTransform:"capitalize"
             }} onClick={handleLogin}>
             Login
         </Fab>
@@ -151,14 +178,14 @@ function Login() {
           flexDirection:"column",
           alignItems:"center",
           justifyContent:"space-evenly",
-          height:"250px",
+          // height:"250px",
           marginTop:"10px"
         }}>
         {loginState.unAuthorized && <p style={{
           color:"red",
           marginBottom:"20px"
         }}>Invalid Credentials</p>}
-        <p>OR</p>
+        {/* <p>OR</p>
           <Fab style={oAuthBtnStyles}>
            Login Using Snapchat      <SocialIcon network="snapchat" style={{ height: 25, width: 25 , color:"white" ,margin:"8px"}} key="25" />
           </Fab>
@@ -167,7 +194,7 @@ function Login() {
           </Fab>
           <Fab style={oAuthBtnStyles}>
            Login Using Facebook      <SocialIcon network="facebook" style={{ height: 25, width: 25 , color:"white" ,margin:"8px"}} key="25" />
-          </Fab>
+          </Fab> */}
         </div>
       </div>
     </>

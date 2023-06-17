@@ -11,6 +11,10 @@ import CreateScreen from "./CreateScreen";
 import ReplyAmount from "./ReplyAmount";
 import ProfileScreen from "./ProfileScreen";
 import SettingsScreen from "./SettingsScreen";
+import RegisterScreen from "./RegisterScreen";
+import ChallengeScreen from "./ChallengeScreen";
+import ChlngAcpt from "./ChlngAcpt";
+
 import ProtectedRoute from "./ProtectedRoute";
 
 import BottomBar from "../components/BottomBar";
@@ -49,8 +53,34 @@ function App() {
             <Route path="/createfield" element={<ProtectedRoute><CreateScreen /></ProtectedRoute>} />
             {/* <Route path="/totalAmount" element={<ReplyAmount />} /> */}
 
+
+            {/* <Route path="/challenge/:u_id1/to/" 
+            // render={(props)=> <ChallengeScreen globalStore={globalStore} {...props} /> } 
+            element={<ProtectedRoute><ChlngAcpt /></ProtectedRoute>}
+             /> */}
+
            
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<RegisterScreen />} />
+            <Route path="/challenge/:u_id1" 
+            // render={(props)=> <ChallengeScreen globalStore={globalStore} {...props} /> } 
+            element={<ChallengeScreen />}
+             />
+            <Route path="/challenge/:u_id1/to/" 
+            // render={(props)=> <ChallengeScreen globalStore={globalStore} {...props} /> } 
+            element={<Login />}
+             />
+            <Route path="/challenge/:u_id1/to/:u_id2" 
+            // render={(props)=> <ChallengeScreen globalStore={globalStore} {...props} /> } 
+            element={<ChlngAcpt />}
+             />
+            {/* <Route path="/challenge/:u_id1/to/:u_id2" 
+            // render={(props)=> <ChallengeScreen globalStore={globalStore} {...props} /> } 
+            element={<Login />}
+             /> */}
+
+
+
 
 
 
