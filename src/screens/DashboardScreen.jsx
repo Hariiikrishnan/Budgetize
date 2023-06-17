@@ -47,8 +47,8 @@ function DashboardScreen() {
     };
     try {
       const res = await axios.get(
-        // `https://starfish-app-uva3q.ondigitalocean.app/budgetize/recent`,
-        `http://localhost:3001/budgetize/recent/${authToken.user.u_id}`,
+        `https://starfish-app-uva3q.ondigitalocean.app/budgetize/recent/${authToken.user.u_id}`,
+        // `http://localhost:3001/budgetize/recent/${authToken.user.u_id}`,
         
         config
       );
@@ -176,7 +176,10 @@ function DashboardScreen() {
 
             {/* User 1 Profile */}
         { authToken.user.challenge!=="none" ?
-        <div>
+        <div style={{
+          width:"70%",
+          display:"contents"
+        }}>
             <div className="d-board-chlng"> 
             <div className="profile-img container" style={{
             margin:"10px"

@@ -136,7 +136,7 @@ function calc(data){
       await axios
         .post(
           // `http://localhost:3001/budgetize/add/${authToken.user.u_id}`,
-          `https://starfish-app-uva3q.ondigitalocean.app/budgetize`,
+          `https://starfish-app-uva3q.ondigitalocean.app/budgetize/add/${authToken.user.u_id}`,
           body,
           config
         )

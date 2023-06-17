@@ -22,7 +22,7 @@ import Header from "../components/Header.jsx";
 import SlideLeft from "../components/SlideLeft.jsx";
 
 import BottomBar from "../components/BottomBar";
-import styles from "../styles/createArea.css";
+import  "../styles/createArea.css";
 
 function CreateArea() {
 
@@ -145,7 +145,7 @@ function CreateArea() {
       await axios
         .get(
           // `http://localhost:3001/budgetize/search/${searchedDate}/${authToken.user.u_id}`,
-          `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${searchedDate}`,
+          `https://starfish-app-uva3q.ondigitalocean.app/budgetize/search/${searchedDate}/${authToken.user.u_id}`,
          config )
         .then((res) => {
           console.log(res.data);
@@ -182,7 +182,7 @@ console.log(selectedPost)
     await axios
       .delete(
         // `http://localhost:3001/budgetize/${selectedPost._id}/${authToken.user.u_id}`,
-        `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${selectedPost._id}`,
+        `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${selectedPost._id}/${authToken.user.u_id}`,
         // body,
         config
       )
@@ -233,7 +233,7 @@ useEffect( ()=>{
     };
     try {
       const res = await axios.get(
-        `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${pageNo}`,
+        `https://starfish-app-uva3q.ondigitalocean.app/budgetize/allLedger/${pageNo}/${authToken.user.u_id}`,
         // `http://localhost:3001/budgetize/allLedger/${pageNo}/${authToken.user.u_id}`,
         
         config
@@ -268,7 +268,7 @@ useEffect( ()=>{
     <>
       <Header />
       <div class="createArea-Head">
-        <Fab aria-label="search" className={styles.headerIcon}>
+        <Fab aria-label="search" className="headerIcon">
           <SearchIcon
             onClick={() => {
               var inputDate = document.getElementById("searchMyDate");
@@ -276,7 +276,7 @@ useEffect( ()=>{
             }}
           />
         </Fab>
-        <Fab aria-label="add" className={styles.headerIcon}>
+        <Fab aria-label="add" className="headerIcon">
           <AddIcon
             onClick={() => {
               var inputDate = document.getElementById("myDate");
