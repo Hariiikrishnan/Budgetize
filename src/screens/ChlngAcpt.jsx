@@ -8,10 +8,9 @@ function ChlngAcpt(props){
     // console.log(props)
     const { u_id1,u_id2 } = useParams();
     const navigate = useNavigate();
-    const { value1, value2 ,value3} = useContext(AuthData);
-
-const [authToken, setAuthToken] = value3;
-
+    const { value1, value2 ,value3 , value4} = useContext(AuthData);
+    const [authToken,setAuthToken] = value3;
+    const [challenger,setChallenger] = value4;
   
 // Api Calling - Post Request to server side with Two User Names.. ( Friendly Challenge)
 async function handleSubmit(){
@@ -39,7 +38,9 @@ async function handleSubmit(){
       .then((res) => {
         console.log(res)
         console.log(res.data);
-       console.log("done")
+       console.log("done");
+       setChallenger(res.data.result1);
+       navigate("/")
       });
 }catch (err) {
   console.log("error ", err.res.data);
