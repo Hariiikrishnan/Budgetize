@@ -68,6 +68,16 @@
 }
 
 
+/* Create Screen Styles */
+
+
+.createScreen.active{
+    overflow: hidden !important;;
+}
+
+
+
+
 
 /* @keyframes bottom-sheet-open{
     0% {

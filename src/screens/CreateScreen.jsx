@@ -117,7 +117,8 @@ function calc(data){
     
   })
   setTotal(total)
-  setReplyAmount(true)
+  document.querySelector(".createScreen").scrollTo(0,0);
+  setReplyAmount(true);
   return total
 }
 
@@ -166,13 +167,14 @@ function calc(data){
       <div
         style={{
           width: "100vw",
-          height: "100%",
+          height: "100vh",
           position: "relative",
           top: "0%",
           backgroundColor: "white",
           zIndex: 10000,
           overflowY:"scroll"
         }}
+        className={`createScreen ${isReplyAmount ? 'active' : ''}`}
       >
         <div
           style={{
@@ -187,7 +189,7 @@ function calc(data){
             {date}
           </h2>
         </div>
-        <table class="createScreen table">
+        <table class="table">
           <tr>
             <th>
               <input

@@ -242,16 +242,16 @@ function DashboardScreen() {
         width:"70%",
         padding:"10px",
         display:"flex",
-        flexDirection:"column",
+        // flexDirection:"column",
         alignItems:"center",
         justifyContent:"center"
       }}  onClick={()=>{
         navigate(`/challenge/${authToken.user.username}`)
       }}>
       
-        <h4>Start Your Budgetize Friendly Challenge Today !</h4>
+        <h5>Start Your Budgetize Friendly Challenge Today !</h5>
         <div style={{
-            width:"35%"
+            width:"38%"
         }}>  
         <svg
       xmlns="http://www.w3.org/2000/svg"

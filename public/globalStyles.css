@@ -5,9 +5,13 @@ body{
     /* background-color:#ebebeb; */
     font-family: 'Cabin', sans-serif !important;
     position: relative;
+    scroll-behavior: smooth;
     /* font-family:Verdana, Geneva, Tahoma, sans-serif; */
-}
+  }
+  *{
+  scroll-behavior: smooth;
 
+}
 #d-board-headWrapper{
   z-index: 1100;
     display: flex;
@@ -102,13 +106,13 @@ body{
   margin:20px
 } */
 
-.createScreen.table {
+.createScreen .table {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
 }
-.createScreen.table tr th input,.createScreen.table tr td input{
+.createScreen .table tr th input,.createScreen .table tr td input{
   font-size: 1rem;
     padding: 12px 10px;
     border-radius: 12px;
@@ -117,13 +121,13 @@ body{
     font-weight: 500;
     background-color: rgba(208, 218, 218, 0.33);
 }
-.createScreen.table tr th input::placeholder,.createScreen.table tr td input::placeholder{
+.createScreen .table tr th input::placeholder,.createScreen .table tr td input::placeholder{
   color: #000000;
   font-size: 1.1rem;
   /* font-weight: 500; */
 
 }
-.createScreen.table tr td input{
+.createScreen .table tr td input{
   width: 70px
 }
 
