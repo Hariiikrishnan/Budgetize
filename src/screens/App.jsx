@@ -13,6 +13,7 @@ import ProfileScreen from "./ProfileScreen";
 import SettingsScreen from "./SettingsScreen";
 import RegisterScreen from "./RegisterScreen";
 import ChallengeScreen from "./ChallengeScreen";
+import ChlngShare from "./ChlngShare";
 import ChlngAcpt from "./ChlngAcpt";
 
 import ProtectedRoute from "./ProtectedRoute";
@@ -53,6 +54,7 @@ function App() {
             <Route path="/profile" element={<ProtectedRoute><ProfileScreen /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><SettingsScreen /></ProtectedRoute>} />
             <Route path="/createfield" element={<ProtectedRoute><CreateScreen /></ProtectedRoute>} />
+            <Route path="/challenge" element={<ProtectedRoute><ChallengeScreen /></ProtectedRoute>} />
             {/* <Route path="/totalAmount" element={<ReplyAmount />} /> */}
 
 
@@ -64,9 +66,11 @@ function App() {
            
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<RegisterScreen />} />
+
+
             <Route path="/challenge/:u_id1" 
             // render={(props)=> <ChallengeScreen globalStore={globalStore} {...props} /> } 
-            element={<ChallengeScreen />}
+            element={<ChlngShare />}
              />
             <Route path="/challenge/:u_id1/to/" 
             // render={(props)=> <ChallengeScreen globalStore={globalStore} {...props} /> } 

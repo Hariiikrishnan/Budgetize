@@ -45,7 +45,9 @@ function CreateArea() {
     loading:false,
     deleted:false
   })
-  
+  const [searchStatus,setSearchStatus] = useState({
+    foundError:false
+  })
   
   
   var todayDate = new Date();
@@ -58,6 +60,7 @@ function CreateArea() {
 
   function handleSearchChange(e) {
     const { value, name } = e.target;
+    console.log(value);
     // setSearchDate(value)
     var enteredDate = parseInt(value.slice(8,10));
     var enteredMonth = parseInt(value.slice(5,7));
@@ -82,12 +85,12 @@ function CreateArea() {
       } else {
         console.log("valid Month");
         getSearchedLedger(value);
-
+        console.log("should work")
       }
     } else {
       console.log("no problem");
-      getSearchedLedger(value);
-  
+      console.log("should work")
+      getSearchedLedger(value);  
     }
     
     // navigate("/createfield")
@@ -134,7 +137,7 @@ function CreateArea() {
 
 
   async function getSearchedLedger(searchedDate) {
-    console.log(searchedDate)
+
     const config = {
       headers: {
         "Content-Type": "application/json",
@@ -150,14 +153,24 @@ function CreateArea() {
         .then((res) => {
           console.log(res.data);
           // setAllLedger(res.data.result)
-          setSelectedPost(...res.data.results)
-          setOpenLedger(true)
+          if(res.data.results.length===0){
+            setInvalidDate(true);
+
+            setInterval(()=>{
+              setInvalidDate(false);
+            },2000)
+          }else{
+            setSelectedPost(...res.data.results)
+
+            setOpenLedger(true)
+          }
         });
     } catch (err) {
       console.error("error ", err.res.data);
     }
   }
-console.log(selectedPost)
+console.log(selectedPost) 
+
 // Function to open the Ledger Bottom Sheet and set the selected ledger in state
   function openLedger(id) {
     console.log(id);
@@ -181,7 +194,7 @@ console.log(selectedPost)
   try {
     await axios
       .delete(
-        // `http://localhost:3001/budgetize/${selectedPost._id}/${authToken.user.u_id}`,
+        // `http://localhost:3001/budgetize/${selectedPost._id}/${authToken.user.u_id}/${selectedPost.totalPerday}`,
         `https://starfish-app-uva3q.ondigitalocean.app/budgetize/${selectedPost._id}/${authToken.user.u_id}`,
         // body,
         config
@@ -233,8 +246,8 @@ useEffect( ()=>{
     };
     try {
       const res = await axios.get(
-        `https://starfish-app-uva3q.ondigitalocean.app/budgetize/allLedger/${pageNo}/${authToken.user.u_id}`,
         // `http://localhost:3001/budgetize/allLedger/${pageNo}/${authToken.user.u_id}`,
+        `https://starfish-app-uva3q.ondigitalocean.app/budgetize/allLedger/${pageNo}/${authToken.user.u_id}`,
         
         config
       );
@@ -296,6 +309,7 @@ useEffect( ()=>{
             type="date"
             id="searchMyDate"
             name="searchDate"
+            // value={}
             onChange={handleSearchChange}
             style={{ display: "none" }}
           />
@@ -358,7 +372,7 @@ useEffect( ()=>{
       </div>
      
       
-      <Snackbar open={invalidDate}>
+      <Snackbar open={invalidDate }>
         <SnackbarContent
           style={{
             backgroundColor: "rgb(255, 81, 81)",
@@ -385,7 +399,7 @@ useEffect( ()=>{
             zIndex: 11011,
           }}
         >
-          <div class={`bottom-sheet ${isOpenLedger ? `active` : ``}`}>
+          <div class={`bottom-sheet ${isOpenLedger && !invalidDate ? `active` : ``}`}>
             <div
               style={{
                 width: "100%",
@@ -395,6 +409,7 @@ useEffect( ()=>{
               }}
               onClick={() => {
                 setOpenLedger(false);
+                setSelectedPost();
               }}
             >
               <hr
@@ -418,7 +433,7 @@ useEffect( ()=>{
               <h3>Amount</h3>
             </div>
           
-            { isOpenLedger?selectedPost.expenses.flat(1).map((expense) => {
+            { isOpenLedger && !invalidDate ?selectedPost.expenses.flat(1).map((expense) => {
               
               return (
                 <div
@@ -444,7 +459,7 @@ useEffect( ()=>{
               }}
             >
               <h3>Total</h3>
-              <h3>{isOpenLedger?selectedPost.totalPerday:null}</h3>
+              <h3>{isOpenLedger && !invalidDate ?selectedPost.totalPerday:null}</h3>
             </div>
             <div style={{
               position:"absolute",
@@ -471,7 +486,7 @@ useEffect( ()=>{
               }}/> }
             </Fab>
             
-            <Snackbar open={deleteStatus.deleted} TransitionComponent={SlideLeft} style={{
+            <Snackbar open={deleteStatus.deleted } TransitionComponent={SlideLeft} style={{
               bottom:"10%",
               left:"10%"
             }}>
@@ -491,7 +506,8 @@ useEffect( ()=>{
             margin: "0% 10% 0% 15%",
             boxShadow:"none"
           }}
-          message={<span id="client-snackbar">Deleted Successfully!</span>}
+          message={
+            deleteStatus.deleted ?   <span id="client-snackbar"> Deleted Successfully!</span> : null}
         />
       </Snackbar>
       

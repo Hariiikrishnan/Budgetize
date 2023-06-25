@@ -27,16 +27,24 @@ function DashboardScreen() {
   var maxLimit = authToken.user.maxLimit ;
   var currentAmount = authToken.user.currentAmount;
 
-  var spendPercent = (currentAmount / maxLimit) * 100;
+  var spendPercent = Math.round((currentAmount / maxLimit) * 100);
   var progress = (spendPercent*3.6)+"deg";
   if(authToken.user.currentAmount >= authToken.user.maxLimit ){
       spendPercent = 100
       progress = (spendPercent*3.6)+"deg";
   }
   console.log(progress)
-  const [data,setData] = useState([]);
+  var todayDate = new Date();
+  todayDate=todayDate.toString().slice(4,15);
+  var chlng_start_date = authToken.user.challenger!=="none"?authToken.challengeData.start_date.slice(4,15):"";
+  
 
-  // console.log(authToken.user.username)
+  const [data,setData] = useState([]);
+  const [challengeDate,setChallengeDate]=useState(0)
+  
+  
+    
+
 
   async function getRecent(){
     const config = {
@@ -72,13 +80,16 @@ function DashboardScreen() {
 
   useEffect(()=>{
     getRecent()
+    if( chlng_start_date.slice(7,11) === todayDate.slice(7,11) &&  chlng_start_date.slice(0,3) === todayDate.slice(0,3)  ){
+
+      console.log((   todayDate.slice(4,6) - chlng_start_date.slice(4,6) )+1)
+      console.log("This year this month")
+      // }
+      setChallengeDate(( todayDate.slice(4,6) - chlng_start_date.slice(4,6)  ) +1)
+  }
+
   },[])
 
-  // useEffect(()=>{
-  //   if(authToken===undefined){
-  //     navigate("/login")
-  //   }
-  // },[])
 
   return (
     <div className="dashboard">
@@ -175,11 +186,15 @@ function DashboardScreen() {
         </div>
 
             {/* User 1 Profile */}
-        { authToken.user.challenge!=="none" ?
+        { authToken.user.challenger!=="none" ?
         <div style={{
           width:"70%",
           display:"contents"
-        }}>
+        }}  onClick={
+          ()=>{
+            navigate("/challenge")
+          }
+        }>
             <div className="d-board-chlng"> 
             <div className="profile-img container" style={{
             margin:"10px"
@@ -215,7 +230,7 @@ function DashboardScreen() {
       color:"white",
       padding:"4px 6px",
       borderRadius:"5px"
-    }}>Day 3</p>
+    }}>Day {challengeDate}</p>
         </div>
 
 

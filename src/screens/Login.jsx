@@ -4,6 +4,7 @@ import { SocialIcon } from 'react-social-icons';
 import Fab from "@mui/material/Fab";
 import { AuthData } from "../context/AuthContext.jsx";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function Login() {
 
@@ -22,7 +23,7 @@ function Login() {
   });
   const [loginState,setLoginState] = useState({
     loading:false,
-    loaded:true,
+    loaded:false,
     unAuthorized:false
   })
   const { value1, value2 ,value3 , value4} = useContext(AuthData);
@@ -45,6 +46,7 @@ function Login() {
 
 
   async function handleLogin(e){
+    setLoginState({loading:true})
     e.preventDefault();
     const config = {
       headers: {
@@ -65,16 +67,12 @@ function Login() {
           // setCurrentUser(res.data.user);
           // setAuthState(res.data.token);
           console.log(res.data)
-          // if(res.data.user.challenge==="none"||res.data.user.challenge==="requested"){
-          //   setAuthToken(res.data);
-          // }else{
-          //   setChallenger(res.data.challenger)
-          // }
-          if(res.data.user.challenge!=="none"){
+       
+          setLoginState({loaded:true})
+          if(res.data.user.challenger!=="none"){
               setChallenger(...res.data.challenger)
           }
           setAuthToken(res.data);
-
 
           if(u_id1){
             // console.log("yeah..",u_id2)
@@ -155,7 +153,13 @@ function Login() {
                 textAlign:"center",
                 textTransform:"capitalize"
             }} onClick={handleLogin}>
-            Login
+            {
+             
+              loginState.loading ? <CircularProgress style={{
+                color:"#5cf520",
+                height:"20px",
+                width:"20px"
+                }} /> : loginState.loaded ? "Hello" : "Login" }
         </Fab>
 
             </div>

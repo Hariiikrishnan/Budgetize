@@ -39,7 +39,7 @@ function RegisterScreen(){
                 formData
             ).then((res)=>{
                 console.log(res.data)
-                setAuthToken({...res.data,challenge:"none"});
+                setAuthToken({...res.data});
                 navigate("/")
             })
         }

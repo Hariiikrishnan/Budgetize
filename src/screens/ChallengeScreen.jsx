@@ -1,160 +1,60 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useParams , useNavigate} from "react-router-dom";
+import React,{useState,useEffect,useContext} from "react";
+import Link, {useNavigate} from "react-router-dom";
 import { AuthData } from "../context/AuthContext.jsx";
-import Fab from "@mui/material/Fab";
 
-// import "../styles/globalStyles.css"
+function ChallengeScreen(){
 
-function ChallengeScreen(props) {
-  // console.log(props)
-  const { u_id1, u_id2 } = useParams();
-  const navigate = useNavigate();
-  const { value1, value2, value3 } = useContext(AuthData);
-  const [authToken, setAuthToken] = value3;
+    const { value1, value2 ,value3,value4} = useContext(AuthData);
 
-  // Web Share API
-      const shareData = {
-          title: "Budgetize Friendly Challenge!",
-          text: `${u_id1} has opted you for a friendly challenge.Click the below link to know more..`,
-          // url: "https://nb-memories.netlify.app",
-          url: `https://budgetize.netlify.app/challenge/${u_id1}/to/`,
-        };
+    const [authToken, setAuthToken] = value3;
+    const [challenger,setChallenger] = value4;
+    const navigate = useNavigate();
+    const [isUser2Active,setUser2Active]=useState(false);
+    console.log(authToken.challengeData);
+    console.log(challenger.username);
 
+
+    const pointsH4Style ={
+        textAlign:"center",
+        margin:"20px 0"
+    }
+
+
+    useEffect(()=>{
+        if(authToken.user.u_id!==authToken.challengeData.user1){
+            console.log("Should swap");
+            setUser2Active(true)
+        }   
+    },[])
     
-        async function handleChallengeBtn() {
-          try {
-              console.log("Opening Web Share")
-            await navigator.share(shareData);
-            console.log("WebSite Shared Successfully");
-            setAuthToken((prevData)=>{
-              return {...prevData,challenge:"requested"}
-            })
+    return <>
+            <div style={{
+                display:"flex",
+                flexDirection:"column",
+                alignItems:"center",
+                padding:"20px",
+            }}>
+                <h2>Challenge</h2>
+                <div style={{
+                    display:"flex",
+                    justifyContent:"space-evenly",
+                    margin:"20px 0",
+                    width:"100%",
+                }}>
+                    <div>
+                        <h4>{authToken.user.username}</h4>
+                        <h4 style={pointsH4Style}>{isUser2Active ? authToken.challengeData.user2_pt : authToken.challengeData.user1_pt}</h4>
+                        {/* <h4>{authToken.challengeData.user1_pt}</h4> */}
+                    </div>
+                    <div>
+                        <h4>{challenger.username}</h4>
+                        <h4 style={pointsH4Style}>{isUser2Active ? authToken.challengeData.user1_pt : authToken.challengeData.user2_pt}</h4>
+                    </div>
+                </div>
 
-          } catch (err) {
-            console.log(`Error: ${err}`);
-          }
-        }
+            </div>
 
-//   console.log(authToken)
-
-  return (
-    <>
-      <div
-        style={{
-          padding: "30px",
-          display: "flex",
-          flexDirection: "column",
-          alignContent: "center",
-        }}
-        className="challengeScreen"
-      >
-        <h3
-          style={{
-            margin: "10px 0",
-            textAlign: "center",
-          }}
-        >
-          Hello {u_id1.charAt().toUpperCase() + u_id1.slice(1)} !
-        </h3>
-        <h3
-          style={{
-            margin: "10px 0",
-            textAlign: "center",
-          }}
-        >
-          Budgetize Friendly Challenge for You !
-        </h3>
-
-        <p
-          style={{
-            marginTop: "5px",
-            color: "red",
-          }}
-        >
-          About Challenge !
-        </p>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <img
-            src="/images/challenge-rules.png"
-            alt="Guideliness"
-            style={{
-              height: "150px",
-              width: "150px",
-            }}
-          />
-        </div>
-
-        <div className="guidelines">
-          <ul>
-            <li >
-              This is a challenge centered around your monthly expenses. We will
-              monitor your and your friend's monthly expenses and provide daily
-              updates based on the information you provided.
-            </li>
-            <li >
-              This challenge relies entirely on the data provided by you, the
-              users. It is possible for anyone to falsify their expense records,
-              but that goes against the purpose of the challenge. Therefore,
-              please be honest and enjoy participating in the challenge.
-            </li>
-            <li>
-              The challenge can commence on any day, but it will conclude and
-              provide results on the 30th of each month. Please note that all
-              these features are in beta and have not been thoroughly tested
-              with proper equipment. If you encounter any issues, we kindly
-              request you to contact the developer.
-            </li>
-            <li >
-              For certain reasons, we are unable to include any rewards or
-              points system for the winners at the moment. However, you can
-              expect to see this feature in upcoming updates. Regardless of who
-              emerges as the winner, please accept our advance congratulations
-            </li>
-          </ul>
-        </div>
-        <div style={{
-            display:'flex',
-            justifyContent:"space-evenly",
-            marginTop:"5px"
-        }}>
-        <Fab onClick={()=>{
-          navigate("/")
-        }}
-        style={{
-            backgroundColor:"white",
-            borderRadius:"8px",
-            // marginRight:"3px",
-            width:"100px",
-            height:"40px",
-            textTransform:"capitalize",
-            border:"solid #5cf520 1px",
-            boxShadow:"none",
-            fontSize:"17px",
-            fontWeight:"600",
-            fontFamily:"'Cabin',sans-serif"
-                    }}>Cancel</Fab>
-        <Fab onClick={handleChallengeBtn} style={{
-            backgroundColor:"#69ff8f",
-            borderRadius:"8px",
-            // marginLeft:"3px",
-            width:"200px",
-            height:"40px",
-            textTransform:"capitalize",
-            border:"solid black 1px",
-            boxShadow:"none",
-            fontSize:"17px",
-            fontWeight:"600",
-            fontFamily:"'Cabin',sans-serif"
-                    }}>Challenge your friend</Fab>
-        </div>
-      </div>
     </>
-  );
 }
 
 export default ChallengeScreen;
