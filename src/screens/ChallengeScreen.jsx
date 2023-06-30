@@ -55,7 +55,7 @@ function ChallengeScreen() {
     datasets: [
       {
         label: "",
-        data: [authToken.challengeData.user1_pt,authToken.challengeData.user2_pt],
+        data: isUser2Active ?[authToken.challengeData.user2_pt,authToken.challengeData.user1_pt] :[authToken.challengeData.user1_pt,authToken.challengeData.user2_pt],
         backgroundColor: ["#FFE15D","#DBDBDB"],
         borderColor: ["red","yellow"],
         borderWidth: "3px",
@@ -126,6 +126,9 @@ function ChallengeScreen() {
   useEffect(() => {
     if (authToken.user.u_id !== authToken.challengeData.user1) {
       console.log("Should swap");
+      // let temp = authToken.challengeData.user2_pt;
+      // authToken.challengeData.user2_pt =   authToken.challengeData.user1_pt ;
+      // authToken.challengeData.user1_pt  = temp;
       setUser2Active(true);
     }
   }, []);
@@ -187,7 +190,7 @@ function ChallengeScreen() {
     color:"white",
               padding:"2.5% 0 1.5% 0",
               borderRadius:"15px 15px 0 0",
-              marginBottom:"4px",
+              marginBottom:"3px",
               fontSize:"1.1rem",
               letterSpacing:"0.09rem"
             }}>{authToken.user.username.charAt().toUpperCase()+authToken.user.username.slice(1)}</h4>
@@ -224,7 +227,7 @@ function ChallengeScreen() {
           <div style={{
             margin:"20px 0",
             height:"45vh",
-            backgroundColor:"#ffaab7bd",
+            backgroundColor:"#fa4887",
             borderRadius:"20px",
             padding:"30px 0"
           }}>
@@ -233,16 +236,18 @@ function ChallengeScreen() {
 
           { authToken.challengeData.user2_pt === authToken.challengeData.user1_pt  ? 
            <p style={{
-            textAlign:"center"
+            textAlign:"center",
+            fontSize:"1.2rem"
            }}> It's Equal ! <br/> You Should level up!</p> :
-            authToken.challengeData.user1_pt > authToken.challengeData.user2_pt ?
-             <p  style={{
-            textAlign:"center"
-           }}>{authToken.user.username} is in Lead !</p> :
-              isUser2Active && authToken.challengeData.user2_pt > authToken.challengeData.user1_pt ?
-               <p  style={{
-            textAlign:"center"
-           }}>{challenger.username} is in Lead !</p> : null
+          isUser2Active && ( authToken.challengeData.user2_pt > authToken.challengeData.user1_pt ) ? 
+          <p style={{
+             textAlign:"center",
+            fontSize:"1.2rem"
+           }}>{authToken.user.username} is in lead</p> : 
+          <p style={{
+              textAlign:"center",
+            fontSize:"1.2rem"
+           }}>{challenger.username} is in lead</p>
           }
         </div>
       </div>
