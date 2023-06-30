@@ -46,40 +46,40 @@ function DashboardScreen() {
     
 
 
-  async function getRecent(){
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + authToken.token,
-      },
-    };
-    try {
-      const res = await axios.get(
-        `https://starfish-app-uva3q.ondigitalocean.app/budgetize/recent/${authToken.user.u_id}`,
-        // `http://localhost:3001/budgetize/recent/${authToken.user.u_id}`,
+  // async function getRecent(){
+  //   const config = {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: "Bearer " + authToken.token,
+  //     },
+  //   };
+  //   try {
+  //     const res = await axios.get(
+  //       `https://starfish-app-uva3q.ondigitalocean.app/budgetize/recent/${authToken.user.u_id}`,
+  //       // `http://localhost:3001/budgetize/recent/${authToken.user.u_id}`,
         
-        config
-      );
-      console.log(res.data.results)
+  //       config
+  //     );
+  //     console.log(res.data.results)
         
-      setData(res.data.results)
-      // setLoading(false);
-      // setData((prevData)=>{
-      //   console.log(prevData)
-      //  return [...prevData,...res.data.results] 
-      // });
+  //     setData(res.data.results)
+  //     // setLoading(false);
+  //     // setData((prevData)=>{
+  //     //   console.log(prevData)
+  //     //  return [...prevData,...res.data.results] 
+  //     // });
 
-      // if(res.data.results.length===0){
-      //   console.log("end!!!!!!!")
-      //   setHasMore(false);
-      // }
-    } catch (err) {
-      console.error("error ", err.res.data);
-    }
-  }
+  //     // if(res.data.results.length===0){
+  //     //   console.log("end!!!!!!!")
+  //     //   setHasMore(false);
+  //     // }
+  //   } catch (err) {
+  //     console.error("error ", err.res.data);
+  //   }
+  // }
 
   useEffect(()=>{
-    getRecent()
+    // getRecent()
     if( chlng_start_date.slice(7,11) === todayDate.slice(7,11) &&  chlng_start_date.slice(0,3) === todayDate.slice(0,3)  ){
 
       console.log((   todayDate.slice(4,6) - chlng_start_date.slice(4,6) )+1)
@@ -226,7 +226,7 @@ function DashboardScreen() {
     </svg>
 
     <p style={{
-      backgroundColor:"red",
+      backgroundColor:"#fa4887",
       color:"white",
       padding:"4px 6px",
       borderRadius:"5px"
@@ -357,10 +357,10 @@ function DashboardScreen() {
 
           </div>
          </div>
-
+{/* 
       {data.map((singleData, index) => {
         return <ShortCard date={singleData.ledgerDate} money={singleData.totalPerday} />;
-      })}
+      })} */}
 
       <div className="bottomButton">
       <Link to="/create">

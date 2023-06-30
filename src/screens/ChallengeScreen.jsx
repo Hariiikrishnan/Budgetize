@@ -201,7 +201,7 @@ function ChallengeScreen() {
     color:"white",
               padding:"2.5% 0 1.5% 0",
               borderRadius:"15px 15px 0 0",
-              marginBottom:"4px",
+              marginBottom:"3px",
               fontSize:"1.1rem",
               letterSpacing:"0.09rem"
             }}>{challenger.username.charAt().toUpperCase()+challenger.username.slice(1)}</h4>
@@ -239,16 +239,20 @@ function ChallengeScreen() {
             textAlign:"center",
             fontSize:"1.2rem"
            }}> It's Equal ! <br/> You Should level up!</p> :
-          isUser2Active && ( authToken.challengeData.user2_pt > authToken.challengeData.user1_pt ) ? 
+          !isUser2Active && ( authToken.challengeData.user2_pt > authToken.challengeData.user1_pt ) ? 
           <p style={{
              textAlign:"center",
             fontSize:"1.2rem"
-           }}>{authToken.user.username} is in lead</p> : 
-          <p style={{
+           }}>{challenger.username.charAt().toUpperCase()+challenger.username.slice(1)} is in lead</p> :   
+             <p style={{
+             textAlign:"center",
+            fontSize:"1.2rem"
+           }}>{authToken.user.username.charAt().toUpperCase()+authToken.user.username.slice(1)} is in lead !</p> }
+          {/* <p style={{
               textAlign:"center",
             fontSize:"1.2rem"
-           }}>{challenger.username} is in lead</p>
-          }
+           }}>{challenger.username} is in lead</p> */}
+          {/* } */}
         </div>
       </div>
     </>
