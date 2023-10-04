@@ -12,6 +12,7 @@ import ReplyAmount from "./ReplyAmount";
 import ProfileScreen from "./ProfileScreen";
 import SettingsScreen from "./SettingsScreen";
 import RegisterScreen from "./RegisterScreen";
+import FutureUpdate from "./FutureUpdate";
 import ChallengeScreen from "./ChallengeScreen";
 import ChlngShare from "./ChlngShare";
 import ChlngAcpt from "./ChlngAcpt";
@@ -63,6 +64,7 @@ function App() {
             element={<ProtectedRoute><ChlngAcpt /></ProtectedRoute>}
              /> */}
 
+            <Route path="/future" element={<FutureUpdate />} />
            
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<RegisterScreen />} />

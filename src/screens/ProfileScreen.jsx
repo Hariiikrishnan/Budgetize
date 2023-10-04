@@ -23,6 +23,8 @@ function ProfileScreen() {
 
   const [userData,setUserData] = value3;
 
+  var token = localStorage.getItem('token');
+
   // useEffect(()=>{
   //   if(userData===undefined){
   //     navigate("/login")
@@ -59,7 +61,7 @@ function ProfileScreen() {
           <ul>
             <h5>Check Points</h5>
             <li>
-              <Link to="">
+              <Link to="/future">
                 <div class="icon-container">
                   <SpeedRoundedIcon />
                 </div>
@@ -68,7 +70,7 @@ function ProfileScreen() {
               </Link>
             </li>
             <li>
-              <Link to="">
+              <Link to="/future">
                 <div
                   class="icon-container"
                   style={{ backgroundColor: "#eba61a" }}
@@ -79,7 +81,7 @@ function ProfileScreen() {
               </Link>
             </li>
             <li>
-              <Link to="">
+              <Link to="/future">
                 <div
                   class="icon-container"
                   style={{ backgroundColor: "#e95883" }}
@@ -102,7 +104,7 @@ function ProfileScreen() {
           
         </div>
       </div>
-      {isEdit && <EditProfileScreen edit={editState} />}
+      {isEdit && <EditProfileScreen edit={editState} name={userData.user.username} token={token} uid={userData.user.u_id}/>}
 
       <BottomBar />
     </>
