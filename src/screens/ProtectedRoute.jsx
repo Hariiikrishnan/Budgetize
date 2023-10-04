@@ -75,8 +75,8 @@ function ProtectedRoute(props) {
                 // }
             })
         } catch (err) {
-            console.error("error ", err);
-
+            console.error(err);
+           
         }
     }
     async function gettingNewToken() {
@@ -108,6 +108,9 @@ function ProtectedRoute(props) {
             })
         } catch (err) {
             console.error("error ", err);
+
+            navigate("/login");
+
             // if(err.response.status===403){
             //     navigate("/login");
             // }
