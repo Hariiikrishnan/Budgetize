@@ -24,7 +24,9 @@ function Login() {
   const [loginState,setLoginState] = useState({
     loading:false,
     loaded:false,
-    unAuthorized:false
+    unAuthorized:false,
+    unKnownError:false,
+    credsError:false,
   })
   const { value1, value2 ,value3 , value4} = useContext(AuthData);
   const [userData,setUserData] = value3;
@@ -92,6 +94,13 @@ function Login() {
             if(error.response.status===401){
               setLoginState({unAuthorized:true})
             }
+            else if (error.response.status===400){
+              setLoginState({credsError:true})
+            }
+            else{
+              setLoginState({unKnownError:true})
+
+            }
             console.log(error.response.headers);
           } else if (error.request) {
             // The request was made but no response was received
@@ -99,6 +108,7 @@ function Login() {
           } else {
             // Something happened in setting up the request that triggered an Error
             console.log('Error', error.message);
+            
           }
       
         });
@@ -186,10 +196,26 @@ function Login() {
           // height:"250px",
           marginTop:"10px"
         }}>
+
+
         {loginState.unAuthorized && <p style={{
           color:"red",
           marginBottom:"20px"
         }}>Invalid Credentials</p>}
+
+        {loginState.credsError && <p style={{
+          color:"red",
+          marginBottom:"20px",
+          textAlign:"center"
+        }}>Kindly enter all Credentials!</p>}
+
+        {loginState.unKnownError && <p style={{
+          color:"red",
+          marginBottom:"20px",
+          textAlign:"center"
+        }}>There was an Unexpected Error <br></br> Kindly Try Again!</p>}
+
+
         {/* <p>OR</p>
           <Fab style={oAuthBtnStyles}>
            Login Using Snapchat      <SocialIcon network="snapchat" style={{ height: 25, width: 25 , color:"white" ,margin:"8px"}} key="25" />

@@ -422,8 +422,14 @@ function DashboardScreen() {
               return <div style={{
           display:"flex",
           justifyContent:"center",
+          flexDirection:"column",
+          alignItems:"center",
           margin:"20px 0 10px 0"
          }}>
+          <p style={{
+            color:"rgb(124 124 124)",
+            margin:"10px 0"
+          }}>Completed Challenges</p>
          <div style={{
             backgroundColor:"#d1d1d1",
             width:"90%",

@@ -20,7 +20,7 @@ function ChlngShare(props) {
           title: "Budgetize Friendly Challenge!",
           text: `${u_id1} has opted you for a friendly challenge.Click the below link to know more..<br>`,
           // url: "https://nb-memories.netlify.app",
-          url: `https://budgetize.netlify.app/challenge/${u_id1}/to/`,
+          url: `https://budgetize-rho.vercel.app/challenge/${u_id1}/to/`,
         };
 
     
