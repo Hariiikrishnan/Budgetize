@@ -1,0 +1,273 @@
+import React, { useState, useContext, useEffect } from "react";
+
+import { AuthData } from "../context/AuthContext.jsx";
+import axios from "axios";
+
+import { Link, useNavigate } from "react-router-dom";
+import InputArea from "../components/InputArea.jsx";
+import ReplyAmount from "./ReplyAmount.jsx";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+
+function CreateScreen() {
+  var total = 0;
+
+  // Variable Component to add input element again and again after onClick..
+  // It works like When we click button one more component is getting added in the components Array(State)
+  const component = (
+    <tr>
+      <th>
+        <input
+          placeholder="Spent On..."
+          name="spentOn"
+          onChange={handleChange}
+          autoComplete="off"
+        ></input>
+      </th>
+      <td>
+        <input
+          name="amount"
+          type="number"
+          placeholder="₹"
+          onChange={handleChange}
+          autoComplete="off"
+        ></input>
+      </td>
+    </tr>
+  );
+
+
+  const navigate = useNavigate();
+  const { value1, value2 } = useContext(AuthData);
+  const [totalPerDay,setTotal] = value2;
+  const [date,setDate] = value1;
+
+  const [components, setComponents] = useState([]);
+  const [inputEmpty, setEmpty] = useState(true);
+  const [singleExpense, setExpense] = useState({
+    spentOn: "",
+    amount: "",
+  });
+  const [ledger, setLedger] = useState([]);
+  const [totalAmount, setTotalAmount] = useState();
+
+  function handleChange(e) {
+    const { value, name } = e.target;
+    setExpense((prevLedger) => {
+      return { ...prevLedger, [name]: value };
+    });
+    setEmpty(true);
+  }
+
+  // useEffect(()=>{
+  //   console.log(singleExpense)
+  // },[singleExpense])
+  
+  // // console.log(singleExpense)
+
+  function handleBtn() {
+    if (singleExpense.spentOn === "" || singleExpense.amount === "") {
+      setEmpty(false);
+      console.log("last one was empty");
+    } else {
+      setComponents((components) => [...components, component]);
+      setLedger((prevLedger) => {
+        return [...prevLedger, singleExpense];
+      });
+      setExpense({
+        spentOn: "",
+        amount: "",
+      });
+    }
+  }
+
+  function handleTick() {
+    if (singleExpense.spentOn !== "" || singleExpense.amount !== "") {
+      console.log("Last one wasnt added");
+      setLedger((prevLedger) => {
+        return [...prevLedger, singleExpense];
+      });
+    }
+    setTotalAmount(true)
+  }
+
+  useEffect(()=>{
+    console.log(ledger)
+    onPostSubmit()
+  },[totalAmount])
+  useEffect(() => {
+    ledger.map((singleLedger) => {
+
+     
+      console.log(singleLedger);
+      total += Number(singleLedger.amount);
+      setTotal(total)
+      
+    });    
+    
+  }, [ledger]);
+  console.log(ledger);
+console.log(totalPerDay)
+
+
+
+async function onPostSubmit(e){
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    },
+  };
+  try{
+    console.log({expenses:ledger,totalPerDay:totalPerDay})
+    const body = JSON.stringify({expenses:ledger,totalPerDay:totalPerDay});
+    await axios
+    .post("http://localhost:3001/budgetize",body,config)
+    .then((res) => {
+      console.log(res)
+    });
+  }
+  catch (err) {
+    console.error("error ", err.res.data);
+  }
+}
+
+
+// async function onSubmit(e) {
+//   const config = {
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: "Bearer " + authState,
+//     },
+//   };
+//   try {
+//     const body = JSON.stringify(post);
+//     await axios
+//       .post(
+//         `https://starfish-app-uva3q.ondigitalocean.app/crushie/moments/${isCurrentUser.u_id}`,
+//         body,
+//         config
+//       )
+//       .then((res) => {
+//         props.onAdd(res.data);
+//       });
+//     setPost({
+//       date: "",
+//       time: "",
+//       place: "",
+//       color: "",
+//       saw: "",
+//       response: "",
+//     });
+//     setLoading(false);
+//   } catch (err) {
+//     console.error("error ", err.res.data);
+//   }
+// }
+
+  return (
+    <>
+      <div
+        style={{
+          width: "100vw",
+          height: "100vh",
+          position: "relative",
+          top: "0%",
+          backgroundColor: "white",
+          zIndex: 10000,
+        }}
+      >
+        <div
+          style={{
+            padding: "40px 20px",
+          }}
+        >
+          <h2
+            style={{
+              textAlign: "center",
+            }}
+          >
+            {date}
+          </h2>
+        </div>
+        <table class="createScreen table">
+          <tr>
+            <th>
+              <input
+                placeholder="Spent On..."
+                name="spentOn"
+                onChange={handleChange}
+                autoComplete="off"
+                required
+              ></input>
+            </th>
+            <td>
+              <input
+                name="amount"
+                type="number"
+                onChange={handleChange}
+                placeholder="₹"
+                autoComplete="off"
+                required
+              ></input>
+            </td>
+          </tr>
+          {/* { components.map((component,index) => component)} */}
+          {components.map((component, index) => {
+            return component;
+          })}
+        </table>
+        {!inputEmpty && (
+          <p
+            style={{
+              textAlign: "center",
+              fontSIze: "1.2rem",
+              margin: "20px 0",
+              fontWeight: 700,
+              color: "red",
+            }}
+          >
+            Please Enter the Above Fields.
+          </p>
+        )}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Fab
+            onClick={handleBtn}
+            style={{
+              backgroundColor: "#5cf520",
+              color: "white",
+              position: "absolute",
+              right: "7%",
+              bottom: "170px",
+            }}
+          >
+            <AddIcon />
+          </Fab>
+          <Fab
+            onClick={
+              handleTick
+             
+            }
+            style={{
+              backgroundColor: "#5cf520",
+              color: "white",
+              position: "absolute",
+              right: "7%",
+              bottom: "100px",
+            }}
+          >
+            <CheckRoundedIcon />
+          </Fab>
+        </div>
+      { totalAmount &&  <ReplyAmount/> }
+      </div>
+    </>
+  );
+}
+
+export default CreateScreen;
